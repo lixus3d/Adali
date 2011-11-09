@@ -1,0 +1,139 @@
+
+
+.unit,
+.building {
+    display:block;
+    position:absolute;
+    width:64px;
+    height:64px; 
+    z-index:1000;
+}
+
+
+.projectile {
+    display:block;
+    position:absolute;
+    z-index:10000;
+    background-repeat:no-repeat;
+}
+
+.graphic{
+    position:absolute;
+    display:block;
+    width:64px;
+    height:64px; 
+    background-repeat:no-repeat;
+    z-index:1000;
+}
+
+.selectZone {
+    position:absolute;
+    display:block;
+    top:14px;
+    left:8px;
+    width:48px;
+    height:38px; 
+    z-index: 200000;
+}
+
+.lifeJauge {
+    position:absolute;
+    display:block;
+    width:inherit;
+    height:5px; 
+    background-color:#0F0;
+    opacity:0.2;
+/*    z-index: 100000;*/
+}
+
+.selected .selectZone{
+    border:1px solid #000;
+}
+
+.selected .lifeJauge {
+    opacity:0.9;
+}
+
+.unit .graphic .turret{
+    position:absolute;
+    display:block;
+    width:64px;
+    height:64px; 
+    background-repeat:no-repeat;
+    z-index: 5000;
+}
+
+.unit.tank .graphic{ 
+    background-image: url('../img/tankBody.png');
+}
+.unit.tank .graphic .turret{
+    background-image: url('../img/tankTurret.png');
+}
+
+.unit.heavyTank .graphic{ 
+    background-image: url('../img/heavyTankBody.png');
+}
+.unit.heavyTank .graphic .turret{ 
+    background-image: url('../img/heavyTankTurret.png');
+}
+
+.unit.artilleryTank .graphic{ 
+    background-image: url('../img/artilleryTank.png');
+}
+
+.projectile.shell{
+    background-image: url('../img/shell.png');
+    width:5px;
+    height:5px; 
+}
+
+.default {background-position: -64px -64px}
+.top {background-position: -64px 0px;}
+.right {background-position: -128px -64px;}
+.bottom {background-position: -64px -128px;}
+.left {background-position: 0 -64px;}
+.topLeft,
+.topleft {background-position: 0 0;}
+.topRight,
+.topright {background-position: -128px 0px;}
+.bottomRight,
+.bottomright {background-position: -128px -128px;}
+.bottomLeft,
+.bottomleft {background-position: 0 -128px;}
+
+
+
+.building{
+    width:128px;
+    height:128px;
+}
+
+.building .selectZone {
+    position:absolute;
+    display:block;
+    top:0px;
+    left:4px;
+    width:110px;
+    height:90px; 
+    z-index: 150000;
+}
+
+.building.smallPower .graphic{
+    width:128px;
+    height:128px;
+    background-image: url('../img/smallPower.png');
+}
+
+.building .default {background-position: 0 -1024px}
+.building .top {background-position: 0 -256px}
+.building .right {background-position: 0 0;}
+.building .bottom {background-position: 0 -768px;}
+.building .left {background-position: 0 -512px;}
+.building .topLeft,
+.building .topleft {background-position: 0 -384px;}
+.building .topRight,
+.building .topright {background-position:  -512px;}
+.building .bottomRight,
+.building .bottomright {background-position: 0 -896px;}
+.building .bottomLeft,
+.building .bottomleft {background-position: 0 -640px;}

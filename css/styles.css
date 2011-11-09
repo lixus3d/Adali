@@ -1,0 +1,343 @@
+/*
+    Document   : styles
+    Created on : 29 avr. 2011, 21:30:20
+    Author     : Emmanuel
+    Description:
+*/
+
+
+body {
+    font-family: 'Arial';
+    background-color:#888;
+/*    background-image: url('../img/grass_64x38.png');*/
+}
+
+a {
+    color:inherit;
+    text-decoration: none;
+}
+
+.interface{
+    position:absolute;
+    top: 0;
+    left: 0;
+    margin:auto;
+    background-image: url('../img/grass_64x38.png');
+}
+
+.map{
+        background-image: url('../img/grass_64x38.png');
+}
+
+.attackCursor{
+    cursor: url('../img/cursor/attack.png') 12 12, auto;
+}
+
+.menu{
+    width:260px;
+    height:787px;
+    position:fixed;
+    top:0;
+    right:0;
+    z-index:100000;
+/*    background-image: url('../img/interface.png');*/
+}
+
+.rB10 {border-radius: 10px;}
+.rB8 {border-radius: 8px;}
+
+.menu .block{
+    border-radius: 10px;
+    border: 1.4pt solid #FFF;
+    background-color: rgba(14,48,77,0.4);
+    box-shadow:inset 0 -2px 12px rgba(0,0,0,0.5);
+}
+
+.menu .credit{
+    width:170px;
+    height:30px;
+    margin: -10px 0 0 35px;
+}
+
+.menu .credit .sold{
+    line-height:38px;
+    text-align:center;
+    color:#FFF;
+    font-size:14px;
+    text-shadow: 1px 1px #000;
+}
+
+.menu .miniMap {
+    width:250px;
+    height:160px;
+    margin: 10px 0 0 0;
+}
+
+.menu .powerJauge {
+    width:25px;
+    height:400px;
+    margin: 15px 0 0 0;
+}
+
+.menu .mask{
+    border-radius: 10px;
+    border: 1.4pt solid #FFF;
+    background-color: rgba(14,48,77,0.4);
+    box-shadow:inset 0 -2px 12px rgba(0,0,0,0.5);
+    position:absolute;
+    height:400px;
+    width:25px;
+    z-index:110000;
+    background-image: url('../img/powerGrid.png');
+    background-repeat: repeat-y;
+    background-position: 13px;
+}
+
+.menu .powerJauge .producing{
+    height:150px;
+    width:25px;
+    position:absolute;
+    background-image: url('../img/powerBar.gif');
+    background-position: -5px 0;
+    border: 1px solid #000;
+}
+
+.menu .powerJauge.low .producing{
+    background:none;
+    z-index:105000;
+}
+
+.menu .powerJauge .draining{
+    height:200px;
+    width:25px;
+    position:absolute;
+    background-image: url('../img/powerBar.gif');
+    background-position: -46px 0;
+    border: 1px solid #FFF;
+}
+
+.menu .powerJauge.good .draining{background-position: -46px 0;}
+.menu .powerJauge.limit .draining{background-position: -87px 0;}
+.menu .powerJauge.low .draining{background-position: -128px 0;}
+
+.menu .construction {
+    margin-left:35px;
+    margin-top:-410px;
+}
+
+.menu .construction .list{
+    width:210px;
+    height:210px;
+    margin-bottom:4px;
+    padding:4px;
+    background-color: rgba(0,0,0,0.3);
+}
+
+.menu .construction .list .subMenu{
+    height:25px;
+    border: 1pt solid #FFF;
+    background-color: rgba(14,48,77,0.4);
+    box-shadow:inset 0 -2px 12px rgba(0,0,0,0.5);
+}
+
+.menu .construction .list .subMenu ul{
+    list-style-type: none;
+    margin:0;
+    padding:0;
+    font-size:9px;
+    line-height:25px;
+    color:#999;
+    text-transform: uppercase;
+}
+
+.menu .construction .list .subMenu ul li{
+    float:left;
+    display:inline-block;
+    border-radius:8px;
+    color:#999;
+}
+
+.menu .construction .list .subMenu ul li a{
+    display:block;
+    padding:0 11px 0 11px;
+}
+
+.menu .construction .list .subMenu ul li:hover{
+    color:#FFF;
+}
+
+.menu .construction .list .subMenu ul li.selected{
+    color:#FFF;
+    box-shadow:inset 0 -2px 12px rgba(0,0,0,0.5);
+}
+
+.menu .construction .list .itemGrid{
+    display:none;
+}
+
+.menu .construction .list .itemGrid.selected{
+    display:block;
+}
+
+
+.menu .construction .list .itemGrid ul {
+    list-style-type: none;
+    margin:0;
+    padding:0;
+    font-size:9px;
+    color:#CCC;
+}
+
+.menu .construction .list .itemGrid ul li{
+    visibility:hidden;
+    float:left;
+    width:65px;
+    height:55px;
+    display:block;
+    overflow:hidden;
+    border-radius:6px;
+    border: 1pt solid #FFF;
+    background-color: rgba(255,255,255,0.2);
+    box-shadow:inset 0 -2px 12px rgba(0,0,0,0.5);
+    margin:3px 3px 0 0;
+}
+.menu .construction .list .itemGrid ul li.available{
+    visibility:visible;
+}
+
+.menu .construction .list .itemGrid ul li:nth-child(3n+0){
+    margin:3px 0 0 0;
+}
+
+.menu .construction .list .itemGrid ul li a{
+    text-align:center;
+    display:block;
+    height:100%;
+}
+
+.menu .construction .list .itemGrid ul li a .count{
+    display:block;
+    text-align:right;
+    padding: 0 5px 0 0;
+    height:16px;
+    font-size:14px;
+    font-weight:bold;
+    text-shadow: 1px 1px #000;
+}
+
+.menu .construction .list .itemGrid ul li a label{
+    display:block;
+    border-radius:3px;
+    margin-top:24px;
+    height:14px;
+    width:100%;
+    line-height:14px;
+    background-color: rgba(0,0,0,0.2);
+    box-shadow:inset 0 0 8px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px #000;
+}
+
+.menu .construction .list .itemGrid ul li a:hover label{
+    color:#FFF;
+}
+
+
+.menu .picto{
+    width:25px;
+    height:26px;
+    position:absolute;
+    background-image:url('../img/pictos.png');
+    z-index:111000;
+}
+
+.menu .picto.credit{
+    margin-left:155px;
+    margin-top:13px;
+}
+
+.menu .picto.wmap{
+    background-position:0 -26px;
+    margin-left:-12px;
+    margin-top:-12px;
+}
+.menu .picto.power{
+    background-position:0 -52px;
+    margin-left:-12px;
+    margin-top:-12px;
+}
+
+.messages {
+    position:absolute;
+    width:100%;
+    top:0px;
+    left:0px;
+}
+.messages .message{
+    color:#F00;
+    background-color:#FFF;
+    padding:3px;
+    width:500px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.selector {
+    display:block;
+    position:absolute;
+    border:1px dotted #000;
+    z-index:100000;
+}
+
+.grid {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:1000px;
+    height:1000px;
+    background-image:url("../img/grid_64x38.png");
+    opacity:0.2;
+}
+
+.wall{
+    width:64px;
+    height:38px;
+    background-image: url('../img/wall_64x38.png');
+    display:block;
+    position:absolute;
+}
+
+.node {
+    width:64px;
+    height:38px;
+    display:block;
+    text-align:center;
+    font-size:14px;
+    line-height:50px;
+    position:absolute;
+}
+
+.pathNode{
+    background-image: url('../img/highlight_64x38.png');
+}
+
+
+.aTop,
+.aTopRight,
+.aRight,
+.aBottomRight,
+.aBottom,
+.aBottomLeft,
+.aLeft,
+.aTopLeft
+{
+    background-image:url('../img/arrows.png');
+    background-repeat:no-repeat;
+}
+
+.aTopRight{background-position: -50px 0}
+.aRight{background-position: -100px 0}
+.aBottomRight{background-position: -150px 0}
+.aBottom{background-position: -200px 0}
+.aBottomLeft{background-position: -250px 0}
+.aLeft{background-position: -300px 0}
+.aTopLeft{background-position: -350px 0}
