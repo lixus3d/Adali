@@ -1,4 +1,5 @@
 <?php
+
 $js = array(
 	/*
 	 * Bases
