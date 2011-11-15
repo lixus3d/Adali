@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Small script that generate an svg grid
+ ****** not used anymore for now ******
+ */
+
 if(!($grid = $_GET['w'])) $grid = 20;
 
 header('Content-Type: image/svg+xml');

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Tiny script that performs the construction of my buildings and units sprites
+ * Just use for the smallPower for now
+ */
+
 $error = null;
 
 if(isset($_GET['spritename']) && $spritename = $_GET['spritename']){
