@@ -7,6 +7,10 @@
         <script type="text/javascript">
         		var js = new Array();
 
+				/**
+				 * All js filtes to load for the RTS to work 
+				 * order is important, as some js load the "namespace"  
+				 */        		
         		js.push(
         			/*
         			 * Bases
@@ -54,15 +58,17 @@
         			'menu',
         			'motor',
         			'unitTesting',
+
+
+
+        			
         			'init');
 
         		var head = document.getElementsByTagName('head')[0];
+        		
     			for(i=0;i<js.length;i++){
         			var file = js[i];
-    			    var tag = document.createElement('script');
-    			    	tag.async = false;
-    			    	tag.type = 'text/javascript';
-    			    	tag.src = './js/'+file+'.js';
+    			    var tag = document.createElement('script'); tag.type = 'text/javascript'; tag.src = './js/'+file+'.js';
     			    head.appendChild(tag);
     			}
         </script>

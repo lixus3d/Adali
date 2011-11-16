@@ -26,7 +26,7 @@ var RULES = {};
 OBJECTS.baseObject.prototype.getRts = function(){
     if(RTS){
         return RTS;
-    }else throw 'RTS is not defined, but prototype.getRts() called.'
+    }else throw 'RTS is not defined, but prototype.getRts() called.';
 }
 
 OBJECTS.baseObject.prototype.getRules = function(){
