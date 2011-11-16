@@ -28,6 +28,6 @@
 ### project features
 - Track time loss in astar and binaryheaps
 - Track time loss in the RTS
-- Try to avoid jQuery if it's to heavy
+- Try to avoid jQuery if it's too heavy
 
 _feel free to contribute_ 
