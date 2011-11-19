@@ -1,10 +1,16 @@
 
+/**
+ * Some common function and properties for all item 
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 19 nov. 2011
+ */
+
 ABSTRACTS.itemAbstract = function(){
     
     /*
      * Default variables
      */
-    this.id = 0;
+    this.id = 0; // unit "number" in the RTS 
     this.x = 0;
     this.y = 0;    
     this.unitSize = 64; 
@@ -42,6 +48,7 @@ ABSTRACTS.itemAbstract = function(){
      * Attack
      */
     this.target = null;
+    this.weapons = [];
     
     /*
      * Methods
@@ -50,6 +57,7 @@ ABSTRACTS.itemAbstract = function(){
     this.setId = function(id){
         this.id = id;        
     };
+    
     this.getId = function(){
         return this.id;
     };
@@ -65,7 +73,10 @@ ABSTRACTS.itemAbstract = function(){
             y: this.y
             };
     };
-       
+    
+    /**
+     * Initialize item weapons from the item vars
+     */
     this.initWeapon = function(){
         var item = this;
         $.each(item.vars.weapon,function(k,weaponType){
@@ -73,6 +84,9 @@ ABSTRACTS.itemAbstract = function(){
         });
     }
     
+    /**
+     * Add a weapon to the item weapons
+     */
     this.addWeapon = function(weapon){
         this.weapons.push(weapon);
     };
@@ -135,7 +149,10 @@ ABSTRACTS.itemAbstract = function(){
         return this.getRts().UTILS.getPointCode(this.getMotor().convertToNodePosition(positionOnGrid));
     };
     
-        
+    /**
+     * Fire every weapons at a target
+     * @param {RTSitem} target 
+     */    
     this.fire = function(target){
         
         var item = this;
@@ -154,6 +171,10 @@ ABSTRACTS.itemAbstract = function(){
         });
     };
     
+    /**
+     * Triggered when the unit is touch and lose an amount of life
+     * @param {number} amount
+     */
     this.touch = function(amount){
         this.life -= amount;
         if(this.life <=0){
@@ -163,12 +184,17 @@ ABSTRACTS.itemAbstract = function(){
         log('item '+this.getId()+' : life '+this.life);
     };
     
-        
+    
+    /**
+     * Indicate whether a position is inSight or not
+     * when the unit stop, the maxSight is potentially maximize ( give advantage to fix item with same weapon )
+     * @param {posObject} position
+     */
     this.inSight = function(position){        
         
         var maxSight = this.vars.sight * this.getRts().grid;
         
-        if(this.destination == null) maxSight *= 1.1;
+        if(this.destination == null) maxSight *= this.getRules().config.sightStaticMultiplier ;
         
         // We calculate distance between actual item position and position
         var width = position.x - this.x;
@@ -203,6 +229,10 @@ ABSTRACTS.itemAbstract = function(){
         return false;
     }
     
+    /**
+     * References the enemy actually inSight and returns the better for the sortKillingList function
+     * @returns {Boolean|RTSitem} 
+     */
     this.enemyInSight = function(){
         var inSights = [];
         
@@ -224,7 +254,7 @@ ABSTRACTS.itemAbstract = function(){
     };
     
 
-    this.toString = function(){return 'itemAbract';};
+    this.toString = function(){return 'itemAbstract';};
 };
 
 ABSTRACTS.itemAbstract.prototype = new OBJECTS.baseObject();

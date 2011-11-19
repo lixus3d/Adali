@@ -25,11 +25,20 @@ OBJECTS.RTS = function(){
 };
 
 /**
- * this is the rules objecti that defines rules for every item in the RTS
+ * this is the rules object that defines rules for every item in the RTS
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 19 nov. 2011
  */
-var RULES = {};
+var RULES = {
+		
+	/**
+	 * Defines RTS basic configuration
+	 */
+	config: {
+		sightStaticMultiplier: 1.1
+	}
+		
+};
 
 /**
  * This is the base object for all other object, it provides

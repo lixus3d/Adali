@@ -208,7 +208,7 @@ OBJECTS.UTILS = function(){
      * Return a relative position from a node position
      * @param {nodePosObject} node
      * @param {isoSize} isoSize
-     * @eturns {posObject} the relative position
+     * @returns {posObject} the relative position
      */
     this.nodePosToRelPos = function(node,isoSize){
         return {

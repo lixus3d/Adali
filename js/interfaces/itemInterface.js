@@ -1,7 +1,9 @@
 
-
+/**
+ * Defines all function necessary for an item
+ * Some testing are done during the RTS start and block if a function is not implemented 
+ */
 INTERFACES.itemInterface = {
-    
     init: function(){},
     activate: function(){},
     initWeapon: function(){},
@@ -26,5 +28,5 @@ INTERFACES.itemInterface = {
     setTurretDirection: function(){},   
     inSight: function(){},   
     enemyInSight: function(){},       
-    toString: function(){return 'itemInterface'}
-}
+    toString: function(){return 'itemInterface';}
+};
