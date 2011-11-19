@@ -25,9 +25,12 @@
 
 ## low priority
 
-### project features
+### project structure 
 - Track time loss in astar and binaryheaps
 - Track time loss in the RTS
 - Try to avoid jQuery if it's too heavy
+
+### project features
+- Find a better solution than the ticker 
 
 _feel free to contribute_ 
