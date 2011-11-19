@@ -17,7 +17,7 @@ OBJECTS.buildings = function(){
         building.setId(this.list.length-1);
         this.idList.push(building.getId()); 
         building.activate();
-    }
+    };
     
     this.killBuilding = function(buildingId){
         
@@ -28,7 +28,7 @@ OBJECTS.buildings = function(){
             this.idList.splice(index,1);
         }
         this.getMotor().selection.update();        
-    }
+    };
     
     this.tick = function(){
         //log(buildings.list);
@@ -37,7 +37,7 @@ OBJECTS.buildings = function(){
                 building.tick();    
             }
         });       
-    }
+    };
     
     this.searchInSelector = function(selector){
         
@@ -72,8 +72,8 @@ OBJECTS.buildings = function(){
         });       
         
         return search;
-    }
+    };
     
-}
+};
 
 OBJECTS.buildings.prototype = new OBJECTS.baseObject();

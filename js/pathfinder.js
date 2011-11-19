@@ -4,7 +4,7 @@ var lastSpreading = {
     nodeCode: null,
     spreading: null,
     list: []
-}
+};
 
 OBJECTS.pathfinder = function(start,end,unit,map,options){
     
@@ -138,7 +138,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                     pathfinder.openList.addElement(sNodeCode,sNode.F);
                 }
             }
-        })    
+        });    
 
         this.addCloseList(nodeCode);    
 
@@ -218,7 +218,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
             if(!pathfinder.inCloseList(nodeCode)){
                 nearestNodes[key] = pathfinder.getNodeByCode(nodeCode);
             }
-        })
+        });
         return nearestNodes;
     };
     
@@ -235,7 +235,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
             bottomleft: nodeCode + this.map.width - 1,
             left: nodeCode - 1,
             topleft: nodeCode - this.map.width - 1        
-        }
+        };
 
         return nearest;
     };
@@ -292,6 +292,8 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         
         var nodeToTest = [node];
         
+        var lowestNode = null;
+        
         while(nodeToTest.length > 0){
             
             var nearestNodes = this.getNearestNodeCodes(nodeToTest[0]);
@@ -321,7 +323,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                 nodeToTest.shift();
             }else{
                 var lowestH = -1;
-                var lowestNode = node;
+                lowestNode = node;
                 $.each(walkableNode,function(k,node){
                     var H = pathfinder.estimate(node,start);
                     //                    log('Code : '+node.getCode());
@@ -354,7 +356,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         var pMap = this.map;     
 
         
-        var retry = 0;
+       // var retry = 0;
         
         while(nodeCodes.length < spread){
             
@@ -369,7 +371,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                 bottomleft: nodeCode + pMap.width - 1,
                 left: nodeCode - 1,
                 topleft: nodeCode - pMap.width - 1        
-            }         
+            };         
         
             $.each(nearest,function(key,code){            
                 switch(true){
@@ -409,7 +411,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         }
         
         return nodeCodes;
-    }
+    };
 
     
     this.getNodeByCode = function(nodeCode){  
@@ -451,7 +453,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         var map = this.getMap();
         var RTS = this.getRts();
         
-        var advanced = false;
+        //var advanced = false;
 
         var unitId = unit.id;
 
@@ -461,12 +463,12 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
             var div = $('<div class="node unit'+unitId+' node-'+nodeCode+' pathNode"></div>');        
             $('.closeList').append(div);
             map.positionElement(div,RTS.UTILS.getPositionByCode(nodeCode),RTS.grid);
-        })
+        });
 //        $('.closeList .unit'+unitId).fadeOut(1500,function(){ $('.closeList .unit'+unitId).remove() });
-    }    
+    };   
     
     this.init(start,end,unit,map,options);
    
-}
+};
 
 OBJECTS.pathfinder.prototype = new OBJECTS.baseObject();

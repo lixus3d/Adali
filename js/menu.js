@@ -80,7 +80,7 @@ OBJECTS.menu = function(){
 			}
 		});
 		this.dom.find('.subMenu ul li:nth-child(1) a').click();
-	}
+	};
 
 	this.updateBuildList = function(){
 
@@ -126,7 +126,7 @@ OBJECTS.menu = function(){
 	};
 
 	this.init();
-}
+};
 
 
 OBJECTS.menu.prototype = new OBJECTS.baseObject();

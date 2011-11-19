@@ -45,7 +45,7 @@ var heaps = function(){
     this.addElement = function(id,force){        
         this.elements.push(id);
         this.forces[id] = force;        
-        this.sortElement(this.elements.length - 1)
+        this.sortElement(this.elements.length - 1);
     };
 
 
@@ -63,7 +63,7 @@ var heaps = function(){
             var v = 1;
             var id = this.elements[v-1];
 
-            while(1){
+            while(true){
                 u = v;
                 if(2*u+1 <= eSize){
                     if( this.cost(this.elements[u-1]) >= this.cost(this.elements[2*u-1])) v = 2*u;
@@ -76,8 +76,8 @@ var heaps = function(){
                     this.elements[u-1] = this.elements[v-1];
                     this.elements[v-1] = id;
                 }else break;
-
             }
+            
         }else{
             this.elements.length = 0; // reseting the heaps
         }
@@ -138,5 +138,5 @@ var heaps = function(){
         this.elements.length = 0;
         this.forces.length = 0;
     };
-}
+};
 

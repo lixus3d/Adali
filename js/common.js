@@ -10,7 +10,7 @@
  */
 function log(e){
     if(window.console){
-        console.log(e)
+        console.log(e);
     }
 }
 /**

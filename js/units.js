@@ -17,7 +17,7 @@ OBJECTS.units = function(){
         unit.setId(this.list.length-1);
         this.idList.push(unit.getId()); 
         unit.activate();
-    }
+    };
     
     this.killUnit = function(unitId){
         
@@ -28,7 +28,7 @@ OBJECTS.units = function(){
             this.idList.splice(index,1);
         }
         this.getMotor().selection.update();        
-    }
+    };
     
     this.tick = function(){
         //log(units.list);
@@ -37,7 +37,7 @@ OBJECTS.units = function(){
                 unit.tick();    
             }
         });       
-    }
+    };
     
     this.searchInSelector = function(selector){
         
@@ -72,8 +72,8 @@ OBJECTS.units = function(){
         });       
         
         return search;
-    }
+    };
     
-}
+};
 
 OBJECTS.units.prototype = new OBJECTS.baseObject();

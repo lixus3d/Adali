@@ -20,11 +20,11 @@ OBJECTS.sounds = function(){
     this.init = function(){
         // preloading all sounds
         $.each(sounds.audioFiles,function(filename,count){
-            for(i=1;i<=count;i++){
+            for(var i=1;i<=count;i++){
                 $('body').append($('<audio src="./sounds/'+filename+''+i+'.wav" preload="auto"></audio>'));            
             }
         });
-    }
+    };
     
     
     this.play = function(filename){
@@ -39,9 +39,9 @@ OBJECTS.sounds = function(){
         
         this.channels[this.channel].play();
         if( this.channel++ > this.maxChannel) this.channel = 0;        
-    }
+    };
     
     this.init();
-}
+};
 
 

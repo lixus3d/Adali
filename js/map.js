@@ -1,4 +1,10 @@
-
+/**
+ * The map object, defines everything relative to the terrain
+ * @param {Array} size
+ * @returns {OBJECTS.map}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 19 nov. 2011
+ */
 OBJECTS.map = function(size) {
 
     var map = this;
@@ -8,6 +14,10 @@ OBJECTS.map = function(size) {
 
     this.dom = $('.map');
 
+    /**
+     * Init every elements of the map
+     * @param {Array} size
+     */
     this.init = function(size){
 
         var RTS = this.getRts();
@@ -20,7 +30,7 @@ OBJECTS.map = function(size) {
         this.nodeZero = {
             x: Math.floor(RTS.offset - ( RTS.isoSize.x * ZeroNodeOffset/2)),
             y: Math.floor(RTS.offset + ( RTS.isoSize.y * ZeroNodeOffset/2))
-        }
+        };
 
         // Correct the background grids
         $('.map, .grid').css({
@@ -41,23 +51,30 @@ OBJECTS.map = function(size) {
 
         log('mapSize: '+this.width+' x '+this.height);
 
-	this.dom.css({
-	    width: size[0],
-	    height: size[1]
-	});
-
-        this.walls = [
-            368,369,370,371,372,
-            555,554,553,552,551,
-            631,632,630,629,628,
-            751,752,753,754,755,756,
-            882,881,880,879,878,877,876,
-            889,890,891,892
-        ];
+		this.dom.css({
+		    width: size[0],
+		    height: size[1]
+		});
+	
+		// TODO : Do the map editor ...
+	    this.walls = [
+	        368,369,370,371,372,
+	        555,554,553,552,551,
+	        631,632,630,629,628,
+	        751,752,753,754,755,756,
+	        882,881,880,879,878,877,876,
+	        889,890,891,892
+	    ];
 //        this.walls = [52,53,54,55,87,88,89,90,122,123,124,125,168, 203,204,205,206,207, 238, 273, 562, 597, 632, 667, 189, 190, 191, 192, 51, 86, 121, 156, 285, 320, 355, 390, 249, 284, 319, 354, 215, 216, 217, 218, 585, 586, 587, 588, 474, 509, 544, 579, 339, 374, 409, 444, 340, 341, 342, 343, 351, 352, 353, 354, 189, 224, 259, 294, 161, 196, 231, 266, 286, 287, 288, 289, 348, 349, 350, 351, 120, 155, 190, 225, 93, 128, 163, 198, 503, 538, 573, 608, 478, 479, 480, 481];
 //        this.generateWalls();
-    }
+    };
 
+    /**
+     * Define whether a nodeCode is walkable for the current unit 
+     * @param {nodeCode} nodeCode
+     * @param {RTSitem} unit
+     * @returns {walkableObject} 
+     */
     this.isWalkable = function(nodeCode,unit){
 
         /*
@@ -69,13 +86,13 @@ OBJECTS.map = function(size) {
          * ...
          */
 
-        var isWalkable = {value: 1, error: 0, infos: {}}
+        var isWalkable = {value: 1, error: 0, infos: {}};
         switch(true){
             case (this.isWall(nodeCode)):
                 isWalkable.value = 0; // 0 = wall, water, tree
                 isWalkable.error = 0;
                 break;
-            case ( (unitFound = this.isUnitAtCode(nodeCode,unit)).error > 0 ):
+            case ( (unitFound = this.isUnitAtCode(nodeCode,unit)).error > 0 ): // really useful js syntax 
                 isWalkable.value = 0;
                 isWalkable.infos.unit = unitFound.unit;
                 if(unitFound.error == 1){ // unit
@@ -84,28 +101,54 @@ OBJECTS.map = function(size) {
                     isWalkable.error = 2;
                 }
                 break;
-            case ( (buildingFound = this.isBuildingAtCode(nodeCode,unit)).error > 0 ):
+            case ( (buildingFound = this.isBuildingAtCode(nodeCode,unit)).error > 0 ): // really useful js syntax
                 isWalkable.value = 0;
                 isWalkable.error = 3;
                 break;
         }
         return isWalkable;
-    }
+    };
 
+    /**
+     * Is there a wall at the given nodeCode
+     * @param {nodeCode} nodeCode
+     * @returns {Boolean}  
+     */
     this.isWall = function(nodeCode){
         return this.walls.indexOf(nodeCode) >= 0;
-    }
+    };
 
+    /**
+     * Does we see thru the given nodeCode
+     * @param {nodeCode} nodeCode
+     * @returns {Boolean}
+     */
     this.isSightable = function(nodeCode){
         switch(true){
-            case (this.walls.indexOf(nodeCode) >= 0):
-//            case (this.isUnitAtCode(nodeCode,unit)): // we can fire or view thru unit ( yes ;) )
+            case this.isWall(nodeCode):
+//            case (this.isUnitAtCode(nodeCode,unit)): // we can fire or view thru unit ( yes ;), why not ^^ )
                 return false;
         }
         return true;
-    }
+    };
 
+    /**
+     * Is there a unit at the given nodeCode (don't forget to exclude the actualOne ...) 
+     * @param {nodeCode} nodeCode
+     * @param {RTSitem} actualUnit
+     * @returns {unitPresenceObject}
+     */
     this.isUnitAtCode = function(nodeCode,actualUnit){
+    	
+        /*
+         * Errors :
+         * 0 = Wall, water, tree, etc ...
+         * 1 = Other team unit
+         * 2 = Friendly unit
+         * 3 = Building
+         * ...
+         */
+    	
         var unitFound = {unit: null, error: 0};
 
         $.each(map.getMotor().units.list,function(k,unit){
@@ -122,11 +165,27 @@ OBJECTS.map = function(size) {
             }
         });
         return unitFound;
-    }
+    };
 
+    /**
+     * Just like isUnitAtCode but for building 
+     * @param {nodeCode} nodeCode
+     * @param {RTSitem} actualUnit
+     * @returns {unitPresenceObject}
+     */
     this.isBuildingAtCode = function(nodeCode,actualUnit){
-        var buildingFound = {building: null, error: 0};
 
+        /*
+         * Errors :
+         * 0 = Wall, water, tree, etc ...
+         * 1 = Other team unit
+         * 2 = Friendly unit
+         * 3 = Building
+         * ...
+         */
+    	
+        var buildingFound = {building: null, error: 0};
+    	        
         $.each(map.getMotor().buildings.list,function(k,building){
             var buildingFootprint = building.getFootprintNodeCode();
 
@@ -143,31 +202,45 @@ OBJECTS.map = function(size) {
         return buildingFound;
     };
 
+    /**
+     * Generate random walls on the map 
+     * @obsolete
+     */
     this.generateWalls = function(){
         this.walls = [];
         // generate some Walls
         var max = 20;
-        for (i = 0; i < max; i++) {
+        for (var i=0; i < max; i++) {
             var code = Math.floor(Math.random()*this.height*this.width);
 
             var direction = Math.random() > 0.5 ? 1 : this.width;
-            for (j = 0; j < 4; j++) {
+            for (var j=0; j < 4; j++) {
                   this.walls.push(code+(direction*j));
             }
 
         }
     };
 
+    /**
+     * Draw the walls on the map 
+     */
     this.drawWalls = function(){
         $('.walls').html('');
         $.each( map.walls ,function(k,code){
             node = map.getRts().UTILS.getPositionByCode(code);
             var div = $('<div class="wall"></div>');
             $('.walls').append(div);
-            map.positionElement(div, node, map.getRts().grid)
-        })
+            map.positionElement(div, node, map.getRts().grid);
+        });
     };
 
+    /**
+     * Draw an element of the map on it 
+     * TODO : Fine a better centralize function 
+     * @param {dom} elem
+     * @param {posObject} position
+     * @param {number} pointSize // obsolete ???
+     */
     this.positionElement = function(elem,position,pointSize){
 
         var RTS = this.getRts();
@@ -193,6 +266,9 @@ OBJECTS.map = function(size) {
 //        });
     };
 
+    /**
+     * Show a bright square at a given nodeCode briefly
+     */
     this.drawNodeHelp = function(nodeCode){
         $('.closeList .helper-'+nodeCode).remove();
 
@@ -202,11 +278,9 @@ OBJECTS.map = function(size) {
         div.fadeOut(2500,function(){ div.remove(); });
     };
 
+    // Launch the map initialization when map is instantiate 
     this.init(size);
-}
+};
 
 OBJECTS.map.prototype = new OBJECTS.baseObject();
 
-OBJECTS.baseObject.prototype.getMap = function(){
-    return this.getMotor().map;
-}

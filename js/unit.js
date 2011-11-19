@@ -1,9 +1,9 @@
 
 OBJECTS.unit = function(x,y,team,unitType,options) {
 
-    this.toString = function(){return 'unitObject'}; // String traduction of the object
+    this.toString = function(){return 'unitObject';}; // String translation of the object
 
-    var unit = this; // Usefull to avoid error in this scope
+    var unit = this; // Useful to avoid error in this scope
 
     this.implement = 'itemInterface';  // INTERFACE
 
@@ -114,9 +114,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
                     });
                     return false;
                 }
-            })
+            });
         }
-    }
+    };
 
     this.doAction = function(action,indexInSelection){
         switch(action.type){
@@ -162,9 +162,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
 
         if(!(position instanceof nodeObject)){
             endPosition = this.getMotor().convertToNodePosition(position);
-            var end = new nodeObject(endPosition.x, endPosition.y);
+            end = new nodeObject(endPosition.x, endPosition.y);
         }else{
-            var end = position;
+            end = position;
         }
 
         var pathfinder = new OBJECTS.pathfinder(start,end,this,this.getMap(),options);
@@ -192,7 +192,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
             this.destination = null;
             this.getMotor().say('I can\t go to the destination !',unit);
         }
-    }
+    };
 
     this.tick = function(){
 
@@ -326,7 +326,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
                         }
                     }
                 }else if(isWalkable.error == 1){
-                    this.getMotor().say('Enemy on my path i kill him before !!!')
+                    this.getMotor().say('Enemy on my path i kill him before !!!');
                     this.wait.time = 50 + Math.floor((Math.random()*50));
                     return true;
                 }else{
@@ -379,10 +379,10 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.path = null;
         this.setDirection([0,0,'default']);
         if(text){
-            this.getMotor().say(text)
+            this.getMotor().say(text);
             };
         return true;
-    }
+    };
 
     this.attack = function(target){
 
@@ -400,7 +400,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
 
     // this.target = null; // to stop attacking
-    }
+    };
 
     this.setDirection = function(direction,force){
 
@@ -430,13 +430,13 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
             }
             this.lastTurretOrientation = orientation;
         }
-    }
+    };
 
 
 
     this.init(x,y,team,unitType,options);
 
-}
+};
 
 /*
  * unit extends itemAbstract

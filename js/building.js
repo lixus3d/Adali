@@ -1,9 +1,9 @@
 
 OBJECTS.building = function(x,y,team,buildingType,options) {
 
-    this.toString = function(){return 'buildingObject'}; // String traduction of the object
+    this.toString = function(){return 'buildingObject';}; // String translation of the object
 
-    var building = this; // Usefull to avoid error in this scope
+    var building = this; // Useful to avoid error in this scope
 
     this.implement = 'itemInterface';  // INTERFACE
 
@@ -74,11 +74,11 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 
 	this.initPower = function(){
 
-	}
+	};
 
 	this.initConstruction = function(){
 
-	}
+	};
 
     /*
      * Return the footprint of the building (nodeCode occuped by the building
@@ -96,7 +96,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
             nodeCodes.push(UTILS.getNodeCodeRel(code,nodeVector));
         }
         return nodeCodes;
-    }
+    };
 
     this.kill = function(){
         if(this.inLife){
@@ -128,7 +128,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
             building.selectDom.click(function(){
                 building.getMotor().selection.addSelection(building);
                 return false;
-            })
+            });
         }else{
             building.dom.hover(function(){
                 if(building.getMotor().selection.getSize()){
@@ -144,9 +144,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
                     });
                     return false;
                 }
-            })
+            });
         }
-    }
+    };
 
     this.doAction = function(action,indexInSelection){
 
@@ -184,9 +184,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 
         if(!(position instanceof nodeObject)){
             endPosition = this.getMotor().convertToNodePosition(position);
-            var end = new nodeObject(endPosition.x, endPosition.y);
+            end = new nodeObject(endPosition.x, endPosition.y);
         }else{
-            var end = position;
+            end = position;
         }
 
         var pathfinder = new OBJECTS.pathfinder(start,end,this,this.getMap(),options);
@@ -212,7 +212,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
             this.destination = null;
             this.getMotor().say('I can\t go to the destination !',building);
         }
-    }
+    };
 
     this.tick = function(){
 
@@ -342,7 +342,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
                         }
                     }
                 }else if(isWalkable.error == 1){
-                    this.getMotor().say('Enemy on my path i kill him before !!!')
+                    this.getMotor().say('Enemy on my path i kill him before !!!');
                     this.wait.time = 50 + Math.floor((Math.random()*50));
                     return true;
                 }else{
@@ -395,10 +395,10 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         this.path = null;
         this.setDirection([0,0,'default']);
         if(text){
-            this.getMotor().say(text)
+            this.getMotor().say(text);
             };
         return true;
-    }
+    };
 
     this.attack = function(target){
 
@@ -416,7 +416,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
 
     // this.target = null; // to stop attacking
-    }
+    };
 
     this.setDirection = function(direction,force){
 
@@ -446,13 +446,13 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
             }
             this.lastTurretOrientation = orientation;
         }
-    }
+    };
 
 
 
     this.init(x,y,team,buildingType,options);
 
-}
+};
 
 /*
  * building extends itemAbstract

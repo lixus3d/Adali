@@ -82,7 +82,7 @@ ABSTRACTS.itemAbstract = function(){
         $.each(item.vars.weapon,function(k,weaponType){
             item.addWeapon(new OBJECTS.weapon(weaponType,{},item));
         });
-    }
+    };
     
     /**
      * Add a weapon to the item weapons
@@ -105,7 +105,7 @@ ABSTRACTS.itemAbstract = function(){
            zIndex: 1000 + this.y 
         });
         
-    }
+    };
     
     this.updateJauge = function(){
         if(!this.dom) this.makeDom();        
@@ -117,7 +117,7 @@ ABSTRACTS.itemAbstract = function(){
             red: 0,
             green: 255,
             blue: 0
-        }        
+        };        
         
         if(jaugeRatio > 0.4){
             color.red = Math.floor(255 * (0.4/jaugeRatio));
@@ -214,7 +214,7 @@ ABSTRACTS.itemAbstract = function(){
             var x = this.x;
             var y = this.y;
             
-            for (i = 1; i <= divider; i++) {
+            for (var i = 1; i <= divider; i++) {
                 // We check that the computed position is "sightable"
                 x += width/divider ;
                 y += height/divider ;
@@ -227,7 +227,7 @@ ABSTRACTS.itemAbstract = function(){
         }
         
         return false;
-    }
+    };
     
     /**
      * References the enemy actually inSight and returns the better for the sortKillingList function

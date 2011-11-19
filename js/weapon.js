@@ -22,7 +22,7 @@ OBJECTS.weapon = function(type,options,parent){
             this.vars = $.extend(this.vars,weaponVars);
         }
         this.vars = $.extend(this.vars,options);
-    }
+    };
     
     
     this.fire = function(target){
@@ -35,7 +35,7 @@ OBJECTS.weapon = function(type,options,parent){
             }
         }
         return false;
-    }
+    };
     
     this.touch = function(target){ // callback by projectile
         target.touch(this.vars.damage);
@@ -44,15 +44,15 @@ OBJECTS.weapon = function(type,options,parent){
     
     this.load = function(){
         this.reloaded = true;
-    }
+    };
     
     this.reload = function(){
         this.reloaded = false;
         window.setTimeout(function(){ weapon.load(); }, weapon.vars.reloadTime * 1000 );
-    }
+    };
     
     this.init(type,options,parent);
     
-}
+};
 
 OBJECTS.weapon.prototype = new OBJECTS.baseObject();

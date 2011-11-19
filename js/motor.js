@@ -20,7 +20,7 @@ OBJECTS.motor = function(map){
         start: {},
         end: {},
         dom: $('.selector')
-    }
+    };
 
     this.init = function(map){
         this.map = map;
@@ -31,7 +31,7 @@ OBJECTS.motor = function(map){
 
         $('body')[0].oncontextmenu = function() {
             return false;
-        }
+        };
 
         $('body').click(function(event){
             if(motor.selection.getSize()){
@@ -55,7 +55,7 @@ OBJECTS.motor = function(map){
             if(motor.selector.activ){
                 motor.selector.dom.css({display: 'none'});
                 if( !motor.selection.addSelection(motor.units.searchInSelector(motor.selector)) ){
-                    motor.selection.addSelection(motor.buildings.searchInSelector(motor.selector))
+                    motor.selection.addSelection(motor.buildings.searchInSelector(motor.selector));
                 }
             }
             motor.selector.activ = false;
@@ -82,11 +82,11 @@ OBJECTS.motor = function(map){
                  }
             }
         });
-    }
+    };
 
     this.unselectAll = function(){
         motor.selection.resetSelection();
-    }
+    };
 
     this.actionSelection = function(event,options){
 
@@ -96,7 +96,7 @@ OBJECTS.motor = function(map){
                 y: null
             },
             type: 'default'
-        }
+        };
 
         var offset = this.getRts().offset;
 
@@ -105,14 +105,14 @@ OBJECTS.motor = function(map){
 
         this.selection.doAction(action);
 
-    }
+    };
 
     this.sortKillingList = function(a,b){
         if(a.life < b.life){
             return -1;
         }else if(a.life == b.life) return 0;
         else return 1;
-    }
+    };
 
     // convert unit position to node position
     this.convertToNodePosition = function(position){
@@ -129,14 +129,14 @@ OBJECTS.motor = function(map){
 //        newPos.x = Math.ceil(position.x / grid);
 //        newPos.y = Math.ceil(position.y / grid);
 //        return newPos;
-    }
+    };
 
     this.convertToRealPosition = function(position){
 
         var RTS = this.getRts();
         var UTILS = RTS.UTILS ;
 
-        var relPos = UTILS.nodePosToRelPos(position, RTS.isoSize)
+        var relPos = UTILS.nodePosToRelPos(position, RTS.isoSize);
         return UTILS.relToAbs(relPos,this.getMap().nodeZero);
 
 //        var newPos = {x: null, y: null};
@@ -144,7 +144,7 @@ OBJECTS.motor = function(map){
 //        newPos.x = (position.x * grid) - (grid/2);
 //        newPos.y = (position.y * grid) - (grid/2);
 //        return newPos;
-    }
+    };
 
     this.tick = function(){
         motor.units.tick();
@@ -173,12 +173,11 @@ OBJECTS.motor = function(map){
     };
 
     this.init(map);
-}
+};
 
 OBJECTS.motor.prototype = new OBJECTS.baseObject();
 
 OBJECTS.baseObject.prototype.getMotor = function(){
     return this.getRts().motor;
-}
-
+};
 

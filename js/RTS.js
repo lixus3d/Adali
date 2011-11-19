@@ -72,3 +72,8 @@ OBJECTS.baseObject.prototype.getRules = function(){
         return RULES;
     }else throw 'RULES is not defined, but prototype.getRules() called.';
 };
+
+
+OBJECTS.baseObject.prototype.getMap = function(){
+    return this.getMotor().map;
+};

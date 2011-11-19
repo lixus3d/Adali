@@ -20,7 +20,8 @@
 ### project features
 - Implementing team's color
 - Implementing build functions
-- Implementing building orientation 
+- Implementing building orientation
+- Create a map editor 
 
 
 ## low priority
@@ -31,7 +32,8 @@
 - Try to avoid jQuery if it's too heavy
 
 ### project features
-- Find a better solution than the ticker 
+- Find a better solution than the ticker
+  
 
 
 

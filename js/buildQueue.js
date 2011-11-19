@@ -3,16 +3,16 @@ OBJECTS.buildQueue = function(){
     
     var buildQueue = this;
     
-    this.actualConstruction = null;
-    this.queue = [];     
-    this.queueQuantity = {};
+    buildQueue.actualConstruction = null;
+    buildQueue.queue = [];     
+    buildQueue.queueQuantity = {};
     
     this.addQueue = function(elementType,subType,team){        
         this.queue.push({type: elementType, subType: subType, team: team});
         if(!this.queueQuantity[elementType]) this.queueQuantity[elementType] = [];
         if(!this.queueQuantity[elementType][subType]) this.queueQuantity[elementType][subType] = 0;
         this.queueQuantity[elementType][subType]++ ;
-        this.getMotor().say('Added to queue')
+        this.getMotor().say('Added to queue');
     };
     
     this.getFirst = function(){
@@ -49,13 +49,13 @@ OBJECTS.buildQueue = function(){
                 this.actualConstruction.vars = unitOptions;
                 this.actualConstruction.time = (this.actualConstruction.vars.price + this.actualConstruction.vars.life);
                 this.progress = 0;
-                this.getMotor().say('Construction in progress, please wait ...')
+                this.getMotor().say('Construction in progress, please wait ...');
             }else{                
                 this.actualConstruction = null;
                 return false;
             }
         }
     };
-}
+};
 
 OBJECTS.buildQueue.prototype = new OBJECTS.baseObject();

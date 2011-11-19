@@ -62,9 +62,9 @@ OBJECTS.path = function(){
                 if(path.reversePathfinding){
                     log('reversing logic');
                     options.forceWalkableBoundary = true;
-                    var pathfinder = new OBJECTS.pathfinder(end,start,unit,this.getMap(),options);
+                    pathfinder = new OBJECTS.pathfinder(end,start,unit,this.getMap(),options);
                 }else{
-                    var pathfinder = new OBJECTS.pathfinder(start,end,unit,this.getMap(),options);
+                    pathfinder = new OBJECTS.pathfinder(start,end,unit,this.getMap(),options);
                 }
                 
                 var calculateReturn = pathfinder.calculate();
@@ -101,9 +101,9 @@ OBJECTS.path = function(){
             if(path.reversePathfinding){
                 log('reversing logic');
                 options.forceWalkableBoundary = true;
-                var pathfinder = new OBJECTS.pathfinder(end,start,unit,this.getMap(),options);
+                pathfinder = new OBJECTS.pathfinder(end,start,unit,this.getMap(),options);
             }else{
-                var pathfinder = new OBJECTS.pathfinder(start,end,unit,this.getMap(),options);
+                pathfinder = new OBJECTS.pathfinder(start,end,unit,this.getMap(),options);
             }
 
             var calculateReturn = pathfinder.calculate();
@@ -132,7 +132,7 @@ OBJECTS.path = function(){
         path.list.reverse();
         walkableFound = path.list.length-1 - walkableFound;        
         return walkableFound; 
-    }
+    };
     
     this.deleteUntilWalkable = function(unit){
 
@@ -148,7 +148,7 @@ OBJECTS.path = function(){
         return walkableFound;
     };   
     
-}
+};
 
 OBJECTS.path.prototype = new OBJECTS.baseObject();
 

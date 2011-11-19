@@ -22,12 +22,12 @@ OBJECTS.unitTesting = function(){
        }       
        
        log('unit tests successfull !!!');
-    }    
+    };    
     
     this.error = function(e){
         log('Unit test error :');
         throw e;
-    }
+    };
     
-}
+};
 

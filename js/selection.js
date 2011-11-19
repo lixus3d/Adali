@@ -8,13 +8,13 @@ OBJECTS.selection = function(){
     
     this.getSize = function(){
         return this.list.length;
-    }
+    };
     
     this.doAction = function(action){
         action.selectionSize = this.getSize();
         $.each(selection.list, function(k,element){
             element.doAction(action,k);
-        })
+        });
         
         // sounds
         switch(this.type){
@@ -45,7 +45,7 @@ OBJECTS.selection = function(){
                 }                        
                 break;
         }
-    }
+    };
     
     this.addSelection = function(collection){
         this.resetSelection();
@@ -53,7 +53,7 @@ OBJECTS.selection = function(){
         if( collection.length != undefined ){
             $.each(collection,function(k,element){
                 selection.addToList(element);
-            })
+            });
         }else{
             this.addToList(collection);
         }
@@ -65,29 +65,29 @@ OBJECTS.selection = function(){
             return true;
         }
         return false;
-    }
+    };
     
     this.addToList = function(element){
         element.select();
         this.type = element.type;
         this.list.push(element);
-    }
+    };
     
     this.resetSelection = function(){
         $.each(selection.list, function(k,element){
             element.unselect();
-        })
+        });
         this.list.length = 0;        
-    }
+    };
     
     this.update = function(){
         $.each(selection.list, function(k,element){
             if(!element || !element.inLife) selection.list.splice(k,1);
         });
         
-    }
+    };
     
-}
+};
 
 OBJECTS.selection.prototype = new OBJECTS.baseObject();
 

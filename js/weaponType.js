@@ -15,4 +15,4 @@ RULES.weapon = {
        imageClass: 'shell'
     }
     
-}
+};

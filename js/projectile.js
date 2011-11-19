@@ -35,8 +35,8 @@ OBJECTS.projectile = function(weapon,target){
         
         if( (Math.abs(width) <= delta) && (Math.abs(height) <= delta) ) this.touch();
         else{
-            var x = this.x;
-            var y = this.y;
+//            var x = this.x;
+//            var y = this.y;
             
             var divider = Math.max(Math.abs(width),Math.abs(height));
             var vector = { x: width/divider, y: height/divider};
@@ -61,13 +61,13 @@ OBJECTS.projectile = function(weapon,target){
         this.dom.css({
             left: (offset + projectile.centerOffset + (Math.floor(projectile.x)))+"px",
             top: (offset + projectile.centerOffset + (Math.floor(projectile.y)))+"px"
-        })   
+        });   
     };
     
     this.touch = function(){
         this.stop();
         this.weapon.touch(projectile.target);
-    }
+    };
     
     this.tick = function(){
         if(projectile.move()){
@@ -87,7 +87,7 @@ OBJECTS.projectile = function(weapon,target){
     
     this.init(weapon,target);
     this.start();
-}
+};
 
 
 OBJECTS.projectile.prototype = new OBJECTS.baseObject();
