@@ -86,7 +86,7 @@ OBJECTS.selection = function(){
     };
     
     /**
-     * Add an  element (RTSitem= to the list
+     * Add an  element (RTSitem) to the list
      * @param {RTSitem} element  
      */
     this.addToList = function(element){

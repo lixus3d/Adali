@@ -19,6 +19,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 
 
     this.type = 'building';
+    this.itemType = '';
     this.unitSize = 128;
     this.centerOffset = this.unitSize/-2;
     /*
@@ -71,6 +72,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
      * @param {Object} options
      */
     this.init = function(x,y,team,buildingType,options){
+    	this.itemType = buildingType;
         if( buildingOptions = this.getRules().building[buildingType]){
             this.vars = $.extend(this.vars,buildingOptions);
         }
@@ -132,7 +134,13 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 	this.resetConstruction = function(){
 		
 	};
-	
+
+	this.postSelect = function(){
+		if(this.waypoint){
+			this.showWaypoint();
+		}
+	};
+
     /**
      * Return the footprint of the building (nodeCode occuped by the building
      * @returns {Array} nodeCodes
@@ -191,7 +199,12 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 
         if(building.team.vars.player){
             building.selectDom.click(function(){
-                building.getMotor().selection.addSelection(building);
+            	if(building.isSelected()){
+            		building.getMotor().buildings.setPrimary(building);
+            		building.getMotor().say('I\'m now the primary building');
+            	}else{
+            		building.getMotor().selection.addSelection(building);
+            	}
                 return false;
             });
         }else{
@@ -220,15 +233,17 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
      */
     this.doAction = function(action,indexInSelection){
 
-        var UTILS = this.getRts().UTILS;
+        //var UTILS = this.getRts().UTILS;
 
         switch(action.type){
             default:
             case 'default':
             case 'waypoint':
             case 'moveTo':
-                this.waypoint = UTILS.absToRel(action.position,building.getMap().nodeZero);
-                log(this.waypoint);
+                waypoint = this.getMotor().convertToNodePosition(action.position);
+                this.waypoint = new nodeObject(waypoint.x, waypoint.y);
+                this.getMotor().say('Waypoint defined !');
+                this.showWaypoint();
                 break;
             case 'attack':
                 if(this.inSight(action.target.getPosition())){
@@ -545,6 +560,10 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
     };
 
+    this.showWaypoint = function(){
+    	//log(this.waypoint);
+    	this.getMap().drawNodeHelp(this.waypoint.getCode(),'blue');
+    };
 
     // Init the building when instantiate
     this.init(x,y,team,buildingType,options);

@@ -55,6 +55,7 @@ OBJECTS.menu = function(){
 						if(queue = RTS.motor[type+'Queue']){
 							queue.addQueue(type,itemName,sType,RTS.playerTeam);
 						}
+						return false;
 					});
 				}
 

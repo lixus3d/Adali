@@ -16,6 +16,7 @@ ABSTRACTS.itemAbstract = function(){
     this.unitSize = 64; 
     this.centerOffset = this.unitSize/-2;
     this.team = null;
+    this.selected = false;
     
     /*
      * Life  
@@ -134,11 +135,19 @@ ABSTRACTS.itemAbstract = function(){
     
         
     this.select = function(){
+    	this.selected = true;
         this.dom.addClass('selected');     
+        if(this.postSelect) this.postSelect();
     };
     
     this.unselect = function(){
+    	this.selected = false;
         this.dom.removeClass('selected');
+        if(this.postUnselect) this.postUnselect();
+    };
+    
+    this.isSelected = function(){
+    	return this.selected;
     };
     
     this.getNodeCode = function(){

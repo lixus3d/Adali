@@ -12,10 +12,10 @@ OBJECTS.team = function(options){
     team.id = null;
 
     team.vars = {
-        player: true,
-	human: true,
-        level: 10,
-        activ: true
+        player: true, // is the team controllable by the player 
+        human: true, // is the team human or computer
+        level: 10, 
+        activ: true 
     };
 
     this.init = function(options){

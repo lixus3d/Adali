@@ -19,6 +19,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
 
 
     this.type = 'unit';
+    this.itemType = '';
 
     /*
      * Path
@@ -71,6 +72,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
      * @date 20 nov. 2011
      */
     this.init = function(x,y,team,unitType,options){
+    	this.itemType = unitType;
         if( unitOptions = this.getRules().unit[unitType]){
             this.vars = $.extend(this.vars,unitOptions);
         }

@@ -107,7 +107,7 @@ OBJECTS.buildQueue = function(){
 	    		}            		
 	            this.progress++;
 	        }else{
-	            this.createItem(this.actualConstruction.elementName, this.actualConstruction.team);     
+	            this.createItem(this.actualConstruction);     
 	            this.resetActualConstruction();
 	        }
     	}
@@ -125,12 +125,27 @@ OBJECTS.buildQueue = function(){
      * @param {string} elementName
      * @param {team} team  
      */
-    this.createItem = function(elementName,team){   	
+    this.createItem = function(queueObject){   	
+    	
+    	var elementName = queueObject.elementName;
+    	var team = queueObject.team;    	
+    	var nativePosition = {x: 0, y: 0};
+    	
+    	if(queueObject.vars.constructionSite){ // the item is construct in a particular building 
+    		// try to get the building
+    		if( constructionSiteItem = this.getMotor().buildings.getItemByName(team.getId(),queueObject.vars.constructionSite)){
+    			nativePosition.x = constructionSiteItem.x;
+    			nativePosition.y = constructionSiteItem.y + 55;
+    		}
+    	}
+    	
     	log(elementName);
     	
-    	var nativePosition = {x: 0, y: 0};
     	item = new OBJECTS.unit(nativePosition.x,nativePosition.y,team,elementName);
         this.getMotor().units.addUnit(item);
+        if(constructionSiteItem && constructionSiteItem.waypoint){
+        	item.moveTo(constructionSiteItem.waypoint);
+        }
         this.getMotor().sounds.play('ready');
     };
     

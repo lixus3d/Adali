@@ -319,7 +319,9 @@ a {
 .pathNode{
     background-image: url('../img/highlight_64x38.png');
 }
-
+.pathNodeblue{background-image: url('../img/highlight_blue_64x38.png');}
+.pathNodered{background-image: url('../img/highlight_red_64x38.png');}
+.pathNodepink{background-image: url('../img/highlight_pink_64x38.png');}
 
 .aTop,
 .aTopRight,

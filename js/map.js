@@ -269,10 +269,12 @@ OBJECTS.map = function(size) {
     /**
      * Show a bright square at a given nodeCode briefly
      */
-    this.drawNodeHelp = function(nodeCode){
+    this.drawNodeHelp = function(nodeCode,color){
+    	if(color == undefined) color = '';
+    	
         $('.closeList .helper-'+nodeCode).remove();
 
-        var div = $('<div class="node helper-'+nodeCode+' pathNode"></div>');
+        var div = $('<div class="node helper-'+nodeCode+' pathNode'+color+'"></div>');
         $('.closeList').append(div);
         map.positionElement(div,RTS.UTILS.getPositionByCode(nodeCode),RTS.grid);
         div.fadeOut(2500,function(){ div.remove(); });

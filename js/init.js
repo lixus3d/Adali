@@ -63,6 +63,7 @@
 
     RTS.motor.buildings.addBuilding(new OBJECTS.building(256,308,team1,'smallPower'));
     RTS.motor.buildings.addBuilding(new OBJECTS.building(128,308,team1,'smallPower'));
+    RTS.motor.buildings.getItemById(1).primary = true;
 
 
     RTS.motor.units.addUnit(new OBJECTS.unit(840,350,team2,'tank'));

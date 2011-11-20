@@ -34,7 +34,7 @@ RULES.unit = {
 		imageClass: 'tank',
 		weapon: ['90mm'],
 		movement: 'tank',
-		constructionSite: 'factory',
+		constructionSite: 'smallPower',
 		requiredType: ['factory']
 	},
 
