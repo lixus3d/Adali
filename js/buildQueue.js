@@ -12,6 +12,8 @@ OBJECTS.buildQueue = function(){
     buildQueue.queue = [];     
     buildQueue.queueQuantity = {};
     
+    buildQueue.progress = 0;
+    
     /**
      * Add something to a queue
      */
@@ -54,6 +56,7 @@ OBJECTS.buildQueue = function(){
      */
     this.tick = function(){
         this.construct();
+        this.doProgress();
     };
     
     /**
@@ -62,41 +65,72 @@ OBJECTS.buildQueue = function(){
      * TODO : Construct slowly when no power
      * TODO : Consume credit 5 by 5
      */
-    this.construct = function(){    
-    	
-        if(this.actualConstruction){
-        	
-            if(this.progress < this.actualConstruction.time){
-            	// We check the price of the unit
-            	if( unitOptions = this.getRules().unit[this.actualConstruction.subType]){
-            		if(price = unitOptions.price){
-            			if(this.progress <= price){ // do we have already get all credits required
-	            			if(this.getMotor().ressources.hasCredit(1)){
-	            				this.getMotor().ressources.addCredit(-1);
-	            			}else return false;
-            			}
-            		}            		
-            	}
-                this.progress++;
-            }else{
-                log(this.actualConstruction.subType);
-                this.getMotor().units.addUnit(new OBJECTS.unit(22,22,this.actualConstruction.team,this.actualConstruction.subType));
-                this.getMotor().sounds.play('ready');
-                this.actualConstruction = null;
-            }
-        }else if(this.getSize()){
-            this.actualConstruction = this.getFirst();
-            if( unitOptions = this.getRules().unit[this.actualConstruction.subType]){
-                this.actualConstruction.vars = unitOptions;
-                this.actualConstruction.time = (this.actualConstruction.vars.price + this.actualConstruction.vars.life);
-                this.progress = 0;
-                
-
-            }else{                
-                this.actualConstruction = null;
-                return false;
-            }
+    this.construct = function(){  
+        if( !this.isConstructing() && this.getSize() ){
+        	this.setActualConstruction();
         }
+    };
+    
+    /**
+     * Is the queue actually constructing a unit ?
+     * @returns {Boolean} 
+     */
+    this.isConstructing = function(){
+    	return this.actualConstruction ? true : false;
+    };
+    
+    /**
+     * Do the construction itself of the item
+     * @returns {Boolean}
+     */
+    this.doProgress = function(){
+    	if(this.isConstructing()){
+	    	// if the item is not yet constructed
+	        if(this.progress < this.actualConstruction.time){
+	        	// We check the price of the unit
+	    		if(price = this.actualConstruction.vars.price){
+	    			if(this.progress <= price){ // do we have already get all credits required
+	        			if(this.getMotor().ressources.hasCredit(1)){
+	        				this.getMotor().ressources.addCredit(-1);
+	        			}else return false;
+	    			}
+	    		}            		
+	            this.progress++;
+	        }else{
+	            log(this.actualConstruction.subType);
+	            this.getMotor().units.addUnit(new OBJECTS.unit(22,22,this.actualConstruction.team,this.actualConstruction.subType));
+	            this.getMotor().sounds.play('ready');            
+	            this.resetActualConstruction();
+	        }
+    	}
+    };
+    
+    /**
+     * Reset the actualConstruction progress
+     */
+    this.resetProgress = function(){
+    	this.progress = 0;
+    };
+    
+    /**
+     * Define the actual item to construct
+     */
+    this.setActualConstruction = function(itemType){
+        this.actualConstruction = this.getFirst();
+        if( unitOptions = this.getRules().unit[this.actualConstruction.subType]){
+            this.actualConstruction.vars = unitOptions;
+            this.actualConstruction.time = (this.actualConstruction.vars.price + this.actualConstruction.vars.life);
+            this.resetProgress();
+        }else{                
+        	this.resetActualConstruction();
+        }    	
+    };
+    
+    /**
+     * Reset the actual item to construct
+     */
+    this.resetActualConstruction = function(){
+    	this.actualConstruction = null;
     };
 };
 

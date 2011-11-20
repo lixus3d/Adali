@@ -20,6 +20,8 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
     
     var pathfinder = this;
     
+    pathfinder.debug = false;
+    
     /**
      * Default options of the pathfinder
      */
@@ -117,11 +119,11 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
      */
     this.calculate = function(){
         if(this.possible){
-            beginT = microtime(); // info timer
+            if(pathfinder.debug) beginT = microtime(); // info timer
             while(this.found==0){
                 if(!this.calculatePath()) break;
             }
-            calculateT = microtime();
+            if(pathfinder.debug) calculateT = microtime();
         //        log('CalculateTime : '+(calculateT - beginT));
         }
         return this.found;
