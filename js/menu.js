@@ -53,7 +53,7 @@ OBJECTS.menu = function(){
 
 					menu.itemsDoms[itemName].click(function(){
 						if(queue = RTS.motor[type+'Queue']){
-							queue.addQueue(type,itemName,RTS.playerTeam);
+							queue.addQueue(type,itemName,sType,RTS.playerTeam);
 						}
 					});
 				}
@@ -101,7 +101,7 @@ OBJECTS.menu = function(){
      * Update credit sold (graphic)
      */
 	this.updateCredit = function(){
-		this.domCredit.html(this.getMotor().ressources.credits);
+		this.domCredit.html(Math.floor(this.getMotor().ressources.credits));
 	};
 
 	/**

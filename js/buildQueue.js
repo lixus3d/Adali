@@ -10,18 +10,29 @@ OBJECTS.buildQueue = function(){
     
     buildQueue.actualConstruction = null;
     buildQueue.queue = [];     
-    buildQueue.queueQuantity = {};
-    
+    buildQueue.queueQuantity = {};    
     buildQueue.progress = 0;
     
     /**
      * Add something to a queue
      */
-    this.addQueue = function(elementType,subType,team){        
-        this.queue.push({type: elementType, subType: subType, team: team});
+    this.addQueue = function(elementType,elementName,subType,team){
+    	// create the queue object
+    	var queueObject = {
+    			type: elementType, // unit or building 
+    			subType: subType, // aerial, infantry, vehicule, etc.
+    			elementName: elementName, // tank, heavyTank, etc.
+    			team: team
+    		};
+    	// add to the queue
+        this.queue.push(queueObject); 
+        
+        // update element quantity
         if(!this.queueQuantity[elementType]) this.queueQuantity[elementType] = [];
-        if(!this.queueQuantity[elementType][subType]) this.queueQuantity[elementType][subType] = 0;
-        this.queueQuantity[elementType][subType]++ ;
+        if(!this.queueQuantity[elementType][elementName]) this.queueQuantity[elementType][elementName] = 0;
+        this.queueQuantity[elementType][elementName]++ ;
+        
+        // Verbose 
         this.getMotor().say('Added to queue');
     };
     
@@ -31,7 +42,7 @@ OBJECTS.buildQueue = function(){
      */
     this.getFirst = function(){
         var element = this.queue.shift();
-        this.queueQuantity[element.type][element.subType]--;
+        this.queueQuantity[element.type][element.elementName]--;
         return element;
     };
     
@@ -39,8 +50,8 @@ OBJECTS.buildQueue = function(){
      * Returns the number of an element in the queue 
      * @returns {number}
      */
-    this.getTypeQuantity = function(elementType,subType){
-        return this.queueQuantity[elementType][subType];
+    this.getTypeQuantity = function(elementType,elementName){
+        return this.queueQuantity[elementType][elementName];
     };
     
     /**
@@ -67,7 +78,7 @@ OBJECTS.buildQueue = function(){
      */
     this.construct = function(){  
         if( !this.isConstructing() && this.getSize() ){
-        	this.setActualConstruction();
+        	this.setActualConstruction(this.getFirst());
         }
     };
     
@@ -89,17 +100,14 @@ OBJECTS.buildQueue = function(){
 	        if(this.progress < this.actualConstruction.time){
 	        	// We check the price of the unit
 	    		if(price = this.actualConstruction.vars.price){
-	    			if(this.progress <= price){ // do we have already get all credits required
-	        			if(this.getMotor().ressources.hasCredit(1)){
-	        				this.getMotor().ressources.addCredit(-1);
-	        			}else return false;
-	    			}
+	    			var increment = price/this.actualConstruction.time;	    			
+        			if(this.getMotor().ressources.hasCredit(increment)){
+        				this.getMotor().ressources.addCredit(-increment);
+        			}else return false;	    			
 	    		}            		
 	            this.progress++;
 	        }else{
-	            log(this.actualConstruction.subType);
-	            this.getMotor().units.addUnit(new OBJECTS.unit(22,22,this.actualConstruction.team,this.actualConstruction.subType));
-	            this.getMotor().sounds.play('ready');            
+	            this.createItem(this.actualConstruction.elementName, this.actualConstruction.team);     
 	            this.resetActualConstruction();
 	        }
     	}
@@ -113,11 +121,25 @@ OBJECTS.buildQueue = function(){
     };
     
     /**
+     * Create the RTSitem, find native position, add to the motor
+     * @param {string} elementName
+     * @param {team} team  
+     */
+    this.createItem = function(elementName,team){   	
+    	log(elementName);
+    	
+    	var nativePosition = {x: 0, y: 0};
+    	item = new OBJECTS.unit(nativePosition.x,nativePosition.y,team,elementName);
+        this.getMotor().units.addUnit(item);
+        this.getMotor().sounds.play('ready');
+    };
+    
+    /**
      * Define the actual item to construct
      */
-    this.setActualConstruction = function(itemType){
-        this.actualConstruction = this.getFirst();
-        if( unitOptions = this.getRules().unit[this.actualConstruction.subType]){
+    this.setActualConstruction = function(queueObject){
+        this.actualConstruction = queueObject;
+        if( unitOptions = this.getRules()[this.actualConstruction.type][this.actualConstruction.elementName]){
             this.actualConstruction.vars = unitOptions;
             this.actualConstruction.time = (this.actualConstruction.vars.price + this.actualConstruction.vars.life);
             this.resetProgress();
