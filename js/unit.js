@@ -82,7 +82,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.life = this.vars.life;
         this.initWeapon();
     };
-
+    
     /**
      * Activate the unit : draw and control 
      */

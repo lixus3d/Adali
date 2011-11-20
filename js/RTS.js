@@ -1,6 +1,6 @@
-
 /**
  * Base RTS object, contains some default configuration
+ * @constructor
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 19 nov. 2011 
  */
@@ -56,7 +56,7 @@ OBJECTS.baseObject = function(){
 
 /**
  * Return the RTS object anywhere 
- * @returns {RTS} The RTS primary object
+ * @returns {OBJECTS.RTS} The RTS primary object
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 19 nov. 2011
  */

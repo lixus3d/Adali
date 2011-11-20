@@ -1,5 +1,6 @@
 /**
  * Building Queue object
+ * @constructor
  * @returns {OBJECTS.buildQueue}
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 20 nov. 2011
@@ -8,15 +9,15 @@ OBJECTS.buildQueue = function(){
     
     var buildQueue = this;
     
-    buildQueue.actualConstruction = null;
-    buildQueue.queue = [];     
+    buildQueue.actualConstruction = {};
+    buildQueue.queue = {}; // queue by subType  
     buildQueue.queueQuantity = {};    
-    buildQueue.progress = 0;
     
     /**
      * Add something to a queue
      */
     this.addQueue = function(elementType,elementName,subType,team){
+    	
     	// create the queue object
     	var queueObject = {
     			type: elementType, // unit or building 
@@ -24,12 +25,14 @@ OBJECTS.buildQueue = function(){
     			elementName: elementName, // tank, heavyTank, etc.
     			team: team
     		};
-    	// add to the queue
-        this.queue.push(queueObject); 
+    	
+    	// add to the queue of the subType
+    	if(this.queue[subType] == undefined) buildQueue.queue[subType] = [];
+    	this.queue[subType].push(queueObject);
         
         // update element quantity
-        if(!this.queueQuantity[elementType]) this.queueQuantity[elementType] = [];
-        if(!this.queueQuantity[elementType][elementName]) this.queueQuantity[elementType][elementName] = 0;
+        if(!this.queueQuantity[elementType]) buildQueue.queueQuantity[elementType] = [];
+        if(!this.queueQuantity[elementType][elementName]) buildQueue.queueQuantity[elementType][elementName] = 0;
         this.queueQuantity[elementType][elementName]++ ;
         
         // Verbose 
@@ -40,8 +43,8 @@ OBJECTS.buildQueue = function(){
      * Return the first element of the queue 
      * @returns {queueElement} 
      */
-    this.getFirst = function(){
-        var element = this.queue.shift();
+    this.getFirst = function(subType){
+        var element = this.queue[subType].shift();
         this.queueQuantity[element.type][element.elementName]--;
         return element;
     };
@@ -58,16 +61,16 @@ OBJECTS.buildQueue = function(){
      * Returns the queue size (number of element in the queue)
      * @returns {number} 
      */
-    this.getSize = function(){
-        return this.queue.length;
+    this.getSize = function(subType){
+        return this.queue[subType] ? this.queue[subType].length : 0;
     };
     
     /**
      * tick function of the queue 
      */
     this.tick = function(){
-        this.construct();
-        this.doProgress();
+    	this.construct();
+    	this.doProgress();
     };
     
     /**
@@ -76,18 +79,21 @@ OBJECTS.buildQueue = function(){
      * TODO : Construct slowly when no power
      * TODO : Consume credit 5 by 5
      */
-    this.construct = function(){  
-        if( !this.isConstructing() && this.getSize() ){
-        	this.setActualConstruction(this.getFirst());
-        }
+    this.construct = function(){    	
+    	
+    	$.each(buildQueue.queue,function(subType,elements){    	
+    		if( !buildQueue.isConstructing(subType) && buildQueue.getSize(subType) ){
+    			buildQueue.setActualConstruction(buildQueue.getFirst(subType));
+            }	
+    	});        
     };
     
     /**
      * Is the queue actually constructing a unit ?
      * @returns {Boolean} 
      */
-    this.isConstructing = function(){
-    	return this.actualConstruction ? true : false;
+    this.isConstructing = function(subType){
+    	return this.actualConstruction[subType] ? true : false;
     };
     
     /**
@@ -95,30 +101,50 @@ OBJECTS.buildQueue = function(){
      * @returns {Boolean}
      */
     this.doProgress = function(){
-    	if(this.isConstructing()){
-	    	// if the item is not yet constructed
-	        if(this.progress < this.actualConstruction.time){
-	        	// We check the price of the unit
-	    		if(price = this.actualConstruction.vars.price){
-	    			var increment = price/this.actualConstruction.time;	    			
-        			if(this.getMotor().ressources.hasCredit(increment)){
-        				this.getMotor().ressources.addCredit(-increment);
-        			}else return false;	    			
-	    		}            		
-	            this.progress++;
-	        }else{
-	            this.createItem(this.actualConstruction);     
-	            this.resetActualConstruction();
-	        }
-    	}
+
+    	$.each(buildQueue.actualConstruction,function(subType,element){
+    		if(element){
+		    	// if the item is not yet constructed
+		        if(element.progress < element.time){
+		        	// We check the price of the unit
+		    		if(price = element.vars.price){
+		    			var increment = price/element.time;	    			
+	        			if(buildQueue.getMotor().ressources.hasCredit(increment)){
+	        				buildQueue.getMotor().ressources.addCredit(-increment);
+	        			}else return false;	    			
+		    		}            		
+		    		element.progress++;
+		        }else{
+		        	buildQueue.createItem(element);     
+		        	buildQueue.resetActualConstruction(subType);
+		        }
+    		}	        
+    	});
+    };
+
+    
+    /**
+     * Define the actual item to construct
+     * @param {queueObject} queueObject
+     */
+    this.setActualConstruction = function(queueObject){
+    	subType = queueObject.subType;        
+        if( unitOptions = this.getRules()[queueObject.type][queueObject.elementName]){
+        	queueObject.vars = unitOptions;
+        	queueObject.time = (queueObject.vars.price + queueObject.vars.life);
+        	queueObject.progress = 0;
+        	buildQueue.actualConstruction[subType] = queueObject;
+        }else{                
+        	buildQueue.resetActualConstruction(subType);
+        }    	
     };
     
     /**
-     * Reset the actualConstruction progress
+     * Reset the actual item to construct
      */
-    this.resetProgress = function(){
-    	this.progress = 0;
-    };
+    this.resetActualConstruction = function(subType){
+    	this.actualConstruction[subType] = null;
+    };    
     
     /**
      * Create the RTSitem, find native position, add to the motor
@@ -147,28 +173,7 @@ OBJECTS.buildQueue = function(){
         	item.moveTo(constructionSiteItem.waypoint);
         }
         this.getMotor().sounds.play('ready');
-    };
-    
-    /**
-     * Define the actual item to construct
-     */
-    this.setActualConstruction = function(queueObject){
-        this.actualConstruction = queueObject;
-        if( unitOptions = this.getRules()[this.actualConstruction.type][this.actualConstruction.elementName]){
-            this.actualConstruction.vars = unitOptions;
-            this.actualConstruction.time = (this.actualConstruction.vars.price + this.actualConstruction.vars.life);
-            this.resetProgress();
-        }else{                
-        	this.resetActualConstruction();
-        }    	
-    };
-    
-    /**
-     * Reset the actual item to construct
-     */
-    this.resetActualConstruction = function(){
-    	this.actualConstruction = null;
-    };
+    };    
 };
 
 OBJECTS.buildQueue.prototype = new OBJECTS.baseObject();

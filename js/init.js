@@ -44,7 +44,7 @@
     // Motor init
     RTS.motor = new OBJECTS.motor(RTS.map);
     RTS.motor.map.drawWalls();
-
+    
     // Adding some teams
     var team1 = new OBJECTS.team({player: true});
 	RTS.playerTeam = team1;

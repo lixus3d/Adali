@@ -1,11 +1,12 @@
 /**
  * Building object 
+ * @constructor
  * @param {Number} x
  * @param {Number} y
  * @param {OBJECTS.team} team
  * @param {String} buildingType
  * @param {Object} options
- * @returns {OBJECTS.unit}
+ * @returns {OBJECTS.building}
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 20 nov. 2011
  */

@@ -1,5 +1,6 @@
 /**
  * The core motor of the RTS
+ * @constructor
  * @param map
  * @returns {OBJECTS.motor}
  * @author Lixus3d <developpement@adreamaline.com>
