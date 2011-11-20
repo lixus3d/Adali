@@ -57,11 +57,23 @@ OBJECTS.buildQueue = function(){
     };
     
     /**
-     * Launch construction , actually construct unit by unit (not by subType)
+     * Launch/Continue construction, actually construct unit by unit (not by subType)
      */
-    this.construct = function(){        
+    this.construct = function(){    
+    	
         if(this.actualConstruction){
+        	
             if(this.progress < this.actualConstruction.time){
+            	// We check the price of the unit
+            	if( unitOptions = this.getRules().unit[this.actualConstruction.subType]){
+            		if(price = unitOptions.price){
+            			if(this.progress <= price){ // do we have already get all credits required
+	            			if(this.getMotor().ressources.hasCredit(1)){
+	            				this.getMotor().ressources.addCredit(-1);
+	            			}else return false;
+            			}
+            		}            		
+            	}
                 this.progress++;
             }else{
                 log(this.actualConstruction.subType);
@@ -75,7 +87,8 @@ OBJECTS.buildQueue = function(){
                 this.actualConstruction.vars = unitOptions;
                 this.actualConstruction.time = (this.actualConstruction.vars.price + this.actualConstruction.vars.life);
                 this.progress = 0;
-                this.getMotor().say('Construction in progress, please wait ...');
+                
+
             }else{                
                 this.actualConstruction = null;
                 return false;
