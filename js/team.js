@@ -1,4 +1,10 @@
-
+/**
+ * Team object
+ * @param {Object} options
+ * @returns {OBJECTS.team}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.team = function(options){
 
     var team = this;

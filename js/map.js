@@ -204,7 +204,7 @@ OBJECTS.map = function(size) {
 
     /**
      * Generate random walls on the map 
-     * @obsolete
+     * @deprecated
      */
     this.generateWalls = function(){
         this.walls = [];

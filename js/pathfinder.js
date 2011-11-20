@@ -6,33 +6,61 @@ var lastSpreading = {
     list: []
 };
 
+/**
+ * Pathfinder base on A* 
+ * @param {nodeCode} start
+ * @param {nodeCode} end
+ * @param {RTSitem} unit
+ * @param {map} map
+ * @param {Object} options
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 19 nov. 2011
+ */
 OBJECTS.pathfinder = function(start,end,unit,map,options){
     
     var pathfinder = this;
     
+    /**
+     * Default options of the pathfinder
+     */
     this.options = {
         forceWalkableBoundary: false,
         friendlyUnitBlock: false,
-        enemyUnitBlock: false
+        enemyUnitBlock: false,
+        spreadEnd: false,
+        spreadAmount: 0,
+        spreadIndex: 0        
     };
     
+    /**
+     * Init the pathfinder for the given move
+	 * @param {nodeCode} start
+	 * @param {nodeCode} end
+	 * @param {RTSitem} unit
+	 * @param {map} map
+	 * @param {Object} options
+     */
     this.init = function(start,end,unit,map,options){
-        this.found = 0;
+    	
+    	this.straightCost = 10;
+    	this.diagonalCost = this.straightCost * 1.4;
+    	
+        this.found = 0; // do we have find a way to the end 
         this.pathDisplacement = 0;
 
-        this.openList = new heaps();
+        this.openList = new heaps(); // Binary heaps for the openList
         this.closeList = [];
         this.nodeList = [];
         
-        this.blockedByFriendlyUnit = [];
+        this.blockedByFriendlyUnit = []; // define the nodeCodes blocked by a friendly unit 
 
-        this.unit = unit;
-        this.map = map;
+        this.unit = unit; // the current unit that querying the pathfinder 
+        this.map = map; // the map where the unit move
         
-        this.path = new OBJECTS.path();
+        this.path = new OBJECTS.path(); // the final path
         
-        this.start = start;
-        this.end = end;
+        this.start = start; // starting nodeCode
+        this.end = end; // ending nodeCode 
         
         this.possible = true;
         
@@ -83,6 +111,10 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         }else this.found = -1;
     };
     
+    /**
+     * Launch the calculation of the path
+     * returns {number} 
+     */
     this.calculate = function(){
         if(this.possible){
             beginT = microtime(); // info timer
@@ -95,6 +127,10 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return this.found;
     };
     
+    /**
+     * Calculate the path (iterative) 
+     * @returns {Boolean} 
+     */
     this.calculatePath = function(){
         node = this.getLowestF();    
 
@@ -113,8 +149,12 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
             if( (walkable = pathfinder.map.isWalkable(sNode.getCode(),pathfinder.unit)).value == 0 ){
                 // this node is not walkable 
                 if(walkable.error == 2){
-                    if(pathfinder.options.friendlyUnitBlock) return true;
-                    penality = 40; // the node is occuped by a friendly unit , penality the place 
+                    if(pathfinder.options.friendlyUnitBlock){
+                    	return true;
+                    }
+                    // the node is occuped by a friendly unit , penality the place
+                    penality = this.getRules().config.pathfinderUnitPenalityFriend;
+                    // penality = 40;  
                 // friend unit don't block
                 //                    if(walkable.infos.unit){
                 //                        if(pathfinder.closeList.length < 4){
@@ -123,13 +163,17 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                 //                        }
                 //                    }
                 }else if(walkable.error ==1) {
-                    if(pathfinder.options.enemyUnitBlock) return true;
-                    penality = 100; // the node is occuped by a enemy unit , penality the place 
+                    if(pathfinder.options.enemyUnitBlock){
+                    	return true;
+                    }
+                    // the node is occuped by a enemy unit , penality the place 
+                    penality = this.getRules().config.pathfinderUnitPenalityEnemy;
                 }else if(walkable.error ==3) {
                     // building 
-                    penality = 200; // the node is occuped by a enemy unit , penality the place 
+                    // the node is occuped by a enemy unit , penality the place
+                    penality = this.getRules().config.pathfinderBuildingPenality;
                 }else{
-                    return true; // go next node                 
+                    return true; // go next node now                
                 }
             }            
             if(pathfinder.score(sNode,node,penality)){
@@ -145,17 +189,23 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return true;
     };
 
+    /**
+     * Calculate the score of a particular nodeCode 
+     * @param {nodeObject} node the node to score
+     * @param {nodeObject} parent the parent node of the node
+     * @param {number} penality special penality given to this node (enemy, combat zone, ... )
+     * @returns {Boolean} True if reassign , false otherwise
+     */
     this.score = function(node,parent,penality){
         
         if(penality == undefined) penality = 0;
         if(!node.parent) node.parent = parent;
 
-        // calculate G 
-        var cost = 10;
-
-        if( (node.x != parent.x) && (node.y != parent.y) ) cost = 14;
+        // calculate G
+        if( (node.x == parent.x) && (node.y == parent.y) ) cost = this.straightCost; // straight cost
+        else cost = this.diagonalCost; // diagonal cost
+        
         var G = parent.G + cost;
-
 
         // calculate H
         var H = this.estimate(node,this.end);
@@ -175,13 +225,16 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                 node.H = H;
                 node.parent = parent;
                 break;
-
         }
         return true;
     };
 
+    /**
+     * Estimate distance between a node and the end and returns the "force" needed
+     * @returns {number} The needed force to go to end
+     */
     this.estimate = function(node,end){
-        var cost = 10;
+    	var cost = this.straightCost;
 
         var displacement = Math.abs(node.x - end.x) + Math.abs(node.y - end.y);
 
@@ -202,12 +255,20 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
     //        return force + Math.floor(ratioPow*this.pathDisplacement);
     };
 
-
+    /**
+     * Return the node with the lowest F in the openList
+     * @returns {Boolean|nodeObject}
+     */
     this.getLowestF = function(){
         if(this.openList.getSize()) return this.getNodeByCode(this.openList.getFirst());
         else return false;
     };
 
+    /**
+     * Returns the nearest nodes of a given node
+     * @param {nodeObject} node 
+     * @returns {Object} Array of nodeObject
+     */
     this.getNearestNodes = function(node){
         var nearestNodeCodes = this.getNearestNodeCodes(node);
         nearestNodeCodes = this.getValidNodes(nearestNodeCodes,node);
@@ -222,7 +283,11 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return nearestNodes;
     };
     
-    
+    /**
+     * Returns the nearest nodeCodes of a given node
+     * @param {nodeObject} node
+     * @returns {Object} Array of nodeCode  
+     */
     this.getNearestNodeCodes = function(node){
         var nodeCode = node.getCode();
                
@@ -240,6 +305,12 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return nearest;
     };
     
+    /**
+     * Return a list of "valid" nodeCode from a given nodeCodeList 
+     * @param {Object} nodeCodeList
+     * @param {nodeObject} initialNode
+     * @returns {Object}
+     */
     this.getValidNodes = function(nodeCodeList,initialNode){
         
         var nearest = nodeCodeList;
@@ -248,14 +319,10 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                 
         var pMap = this.map;
         
-        // On supprime les murs et les hors grilles
         for(var key in nearest){            
             var code = nearest[key];
             switch(true){
-                //                case ( (walkable = map.isWalkable(code,pathfinder.unit)) <= 0 ):
-                //                    if(walkable == -2){ // friendly unit blocking 
-                //                        log('friendly unit blocking');
-                //                    }
+            	// outside the map
                 case (code<1):
                 case (code>pMap.width*pMap.height):                
                 case ( ((nodeCode%pMap.width)==1) && ( (key=='left') || (key=='bottomleft') || (key=='topleft') ) ):
@@ -263,7 +330,8 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
                     delete nearest[key];
                     continue;
             }
-            // We check the diagonals
+            
+            // We check if the diagonals are really reachable from the actual point  
             if( key=='topright' || key == 'bottomright' || key=='bottomleft' || key=='topleft'){
                     
                 var sNode = pathfinder.getNodeByCode(code);
@@ -282,6 +350,11 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return nearest;      
     };
     
+    /**
+     * Return the nearest walkable node of a given node
+     * @param {nodeObject} node 
+     * @returns {nodeObject} 
+     */
     this.getNearestWalkableNode = function(node){
         
         var pMap = this.map;
@@ -344,6 +417,12 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         
     };
     
+    /**
+     * Return a list of nodeCode arround a node that is reachable from this one 
+     * @param {nodeObject} node
+     * @param {number} spread The spread amount, the minimum number of nodeCode to return so
+     * @returns {Array}
+     */
     this.getSpreadNodesCodes = function(node, spread){
         
         if(spread == undefined) spread = 1;
@@ -413,7 +492,11 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return nodeCodes;
     };
 
-    
+    /**
+     * Return a nodeObject from its nodeCode
+     * @param {nodeCode} nodeCode
+     * @returns {nodeObject}
+     */
     this.getNodeByCode = function(nodeCode){  
         if( !this.nodeList[nodeCode]) {
             var node = new nodeObject();
@@ -424,11 +507,20 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         return this.nodeList[nodeCode];
     };
     
+    /**
+     * Add a nodeObject to the nodeList and return the nodeCode of this node
+     * @param {nodeObject} node
+     * @returns {nodeCode}
+     */
     this.addNode = function (node){
         this.nodeList[node.getCode()] = node ;    
         return node.getCode();
     };
 
+    /**
+     * Add a nodeCode to the closeList, if this is the endCode we find a way to it so we stop and fill the path
+     * @param {nodeCode} nodeCode 
+     */
     this.addCloseList = function(nodeCode){
         this.closeList.push(nodeCode);
         if(nodeCode == this.end.getCode()){
@@ -437,10 +529,17 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         }
     };
 
+    /**
+     * Is a nodeCode in the closeList 
+     * @param {nodeCode} nodeCode
+     */
     this.inCloseList = function(nodeCode){
         return this.closeList.indexOf(nodeCode) != -1;
     };    
     
+    /**
+     * Fill the path 
+     */
     this.setPath = function(){
         var n = this.end;
         while(n){
@@ -449,6 +548,10 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
         }
     };        
     
+    /**
+     * Show the path found on the map 
+     * @deprecated
+     */
     this.showPath = function(unit){
         var map = this.getMap();
         var RTS = this.getRts();
@@ -467,6 +570,7 @@ OBJECTS.pathfinder = function(start,end,unit,map,options){
 //        $('.closeList .unit'+unitId).fadeOut(1500,function(){ $('.closeList .unit'+unitId).remove() });
     };   
     
+    // init the pathfinder when instantiate 
     this.init(start,end,unit,map,options);
    
 };

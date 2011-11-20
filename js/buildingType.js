@@ -1,4 +1,6 @@
-
+/**
+ * Every rules related to buildings 
+ */
 RULES.building = {
 
 	/*

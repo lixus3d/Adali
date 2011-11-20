@@ -1,3 +1,9 @@
+/**
+ * buildings list of the RTS 
+ * @returns {OBJECTS.buildings}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 
 OBJECTS.buildings = function(){
     
@@ -10,15 +16,23 @@ OBJECTS.buildings = function(){
 //        $.each(buildings.list,function(k,building){
 //            building.unselect();
 //        })       
-//    };    
+//    };
     
+    /**
+     * Add a building to the buildings list and activate the building
+     * @param {RTSitem} building 
+     */    
     this.addBuilding = function(building){
         this.list.push(building) ;         
         building.setId(this.list.length-1);
         this.idList.push(building.getId()); 
         building.activate();
     };
-    
+
+    /**
+     * Kill a building, update the list, update the current selection
+     * @param {number} buildingId
+     */
     this.killBuilding = function(buildingId){
         
         // get normal list position 
@@ -30,6 +44,9 @@ OBJECTS.buildings = function(){
         this.getMotor().selection.update();        
     };
     
+    /**
+     * Execute every building tick when tick is triggered by the motor tick
+     */
     this.tick = function(){
         //log(buildings.list);
         $.each(buildings.getMotor().buildings.list,function(k,building){
@@ -39,6 +56,11 @@ OBJECTS.buildings = function(){
         });       
     };
     
+    /**
+     * Return a list of building in the selector area if presents
+     * @param {selector} selector
+     * @return {Array}
+     */    
     this.searchInSelector = function(selector){
         
         var search = [];

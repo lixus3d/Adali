@@ -1,4 +1,8 @@
-
+/**
+ * References all teams  
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.teams = function (){
     
     var teams = this;

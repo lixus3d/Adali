@@ -1,16 +1,25 @@
-
+/**
+ * Do some "unit tests" before launching everything 
+ * Not really unit test but some tests to check if everything correctly define 
+ * @returns {OBJECTS.unitTesting}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.unitTesting = function(){
     
     var unitTest = this;
     
+    /**
+     * Launch the test process 
+     */
     this.doTest = function(){
         
         log('do some unit tests');
+        
        /*
         * CHECK IMPLEMENTATION OF SOME OBJECTCLASS 
-        */
-       
-       var items = ['unit'];
+        */       
+       var items = ['unit','building'];
        
        for(var i in items){       
            if(OBJECTS[items[i]]){
@@ -24,6 +33,9 @@ OBJECTS.unitTesting = function(){
        log('unit tests successfull !!!');
     };    
     
+    /**
+     * Show error and throw it  
+     */
     this.error = function(e){
         log('Unit test error :');
         throw e;

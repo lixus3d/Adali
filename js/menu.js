@@ -9,7 +9,7 @@ OBJECTS.menu = function(){
 
 	this.powerJaugeHeight = 400;
 
-	/*
+	/**
      * Get every jquery's menu elements
      */
 	this.init = function(){
@@ -23,7 +23,7 @@ OBJECTS.menu = function(){
 		this.initTabs();
 	};
 
-	/*
+	/**
 	 * Construct every build list from configuration
 	 */
 	this.constructBuildList = function(){
@@ -61,7 +61,10 @@ OBJECTS.menu = function(){
 			});
 		});
 	};
-
+	
+	/**
+	 * Init menu tabs 
+	 */
 	this.initTabs = function(){
 		var tabLinks = this.dom.find('a[href$=-tab]');
 		tabLinks.each(function(){
@@ -86,7 +89,7 @@ OBJECTS.menu = function(){
 
 	};
 
-	/*
+	/**
      * Ticker that update menu
      */
 	this.tick = function(){
@@ -94,14 +97,14 @@ OBJECTS.menu = function(){
 		this.updatePower();
 	};
 
-	/*
+	/**
      * Update credit sold (graphic)
      */
 	this.updateCredit = function(){
 		this.domCredit.html(this.getMotor().ressources.credits);
 	};
 
-	/*
+	/**
      * Update power Jauge (graphic)
      */
 	this.updatePower = function(){

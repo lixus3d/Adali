@@ -1,15 +1,28 @@
-
+/**
+ * A Selection object, it can regroup unit or building 
+ * @returns {OBJECTS.selection}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.selection = function(){
     
     var selection = this;
     
-    this.type = 'unit';
+    this.type = 'unit'; // either unit or building 
     this.list = [];
     
+    /**
+     * Returns the size of the selection
+     * @returns {Number} 
+     */
     this.getSize = function(){
         return this.list.length;
     };
     
+    /**
+     * Do the action on every element of the list 
+     * @param {Action} action
+     */
     this.doAction = function(action){
         action.selectionSize = this.getSize();
         $.each(selection.list, function(k,element){
@@ -47,6 +60,11 @@ OBJECTS.selection = function(){
         }
     };
     
+    /**
+     * Add a collection of RTSitem to the selection
+     * TODO : Add a shift/ctrl modifier for not reseting everytime 
+     * @param {Array} collection
+     */
     this.addSelection = function(collection){
         this.resetSelection();
         
@@ -67,12 +85,19 @@ OBJECTS.selection = function(){
         return false;
     };
     
+    /**
+     * Add an  element (RTSitem= to the list
+     * @param {RTSitem} element  
+     */
     this.addToList = function(element){
         element.select();
         this.type = element.type;
         this.list.push(element);
     };
     
+    /**
+     * Empty the selection and unselect element 
+     */
     this.resetSelection = function(){
         $.each(selection.list, function(k,element){
             element.unselect();
@@ -80,6 +105,9 @@ OBJECTS.selection = function(){
         this.list.length = 0;        
     };
     
+    /**
+     * Update the current selection 
+     */
     this.update = function(){
         $.each(selection.list, function(k,element){
             if(!element || !element.inLife) selection.list.splice(k,1);

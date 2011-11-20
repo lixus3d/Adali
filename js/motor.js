@@ -1,9 +1,18 @@
-
+/**
+ * The core motor of the RTS
+ * @param map
+ * @returns {OBJECTS.motor}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.motor = function(map){
 
     var motor = this;
 
-    this.units = new OBJECTS.units();
+    /**
+     * Instantiate all RTS native objects 
+     */
+    this.units = new OBJECTS.units(); 
     this.buildings = new OBJECTS.buildings();
     this.teams = new OBJECTS.teams();
     this.sounds = new OBJECTS.sounds();
@@ -22,11 +31,17 @@ OBJECTS.motor = function(map){
         dom: $('.selector')
     };
 
+    /**
+     * Init the motor , set the map and activate control 
+     */
     this.init = function(map){
         this.map = map;
         this.activateControl();
     };
 
+    /**
+     * Activate mouse control of the RTS 
+     */
     this.activateControl = function(){
 
         $('body')[0].oncontextmenu = function() {
@@ -84,10 +99,16 @@ OBJECTS.motor = function(map){
         });
     };
 
+    /**
+     * Unselect everything 
+     */
     this.unselectAll = function(){
         motor.selection.resetSelection();
     };
 
+    /**
+     * Construct the action to give to every element in the list 
+     */
     this.actionSelection = function(event,options){
 
         var action = {
@@ -107,14 +128,21 @@ OBJECTS.motor = function(map){
 
     };
 
+    /**
+     * Function that sort a list for killing 
+     */
     this.sortKillingList = function(a,b){
-        if(a.life < b.life){
+        if(a.life < b.life){ // Less life = better target
             return -1;
         }else if(a.life == b.life) return 0;
         else return 1;
     };
 
-    // convert unit position to node position
+    /**
+     * convert unit position to node position
+     * @param {posObject} position
+     * @returns {nodePos} 
+     */ 
     this.convertToNodePosition = function(position){
 
         var RTS = this.getRts();
@@ -131,6 +159,11 @@ OBJECTS.motor = function(map){
 //        return newPos;
     };
 
+    /**
+     * Convert a nodePosition to a realPosition 
+     * @param {nodePos} position
+     * @returns {posObject} 
+     */
     this.convertToRealPosition = function(position){
 
         var RTS = this.getRts();
@@ -146,23 +179,39 @@ OBJECTS.motor = function(map){
 //        return newPos;
     };
 
+   /**
+    * Motor base ticker , tick every sub elements 
+    */
     this.tick = function(){
         motor.units.tick();
         motor.unitQueue.tick();
-	motor.menu.tick();
+        motor.buildings.tick();
+        motor.buildingQueue.tick();
+        motor.menu.tick();
     };
 
+    /**
+     * Start the motor 
+     */
     this.start = function(){
         if(this.ticker) this.stop();
         log('Starting Motor');
         motor.ticker = window.setInterval(motor.tick,this.getRts().tickTime);
     };
 
+    /**
+     * Stop the motor 
+     */
     this.stop = function(){
         log('Stopping Motor');
         window.clearInterval(motor.ticker);
     };
 
+    /**
+     * Say something in the game console 
+     * @param {String} text
+     * @param {RTSitem} element
+     */
     this.say = function(text,element){
 //        return true;
         var div = $('<div class="message">'+text+'</div>');
@@ -176,8 +225,4 @@ OBJECTS.motor = function(map){
 };
 
 OBJECTS.motor.prototype = new OBJECTS.baseObject();
-
-OBJECTS.baseObject.prototype.getMotor = function(){
-    return this.getRts().motor;
-};
 

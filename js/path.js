@@ -1,4 +1,8 @@
-
+/**
+ * Path object define an Array of nodeCode from one position to another
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 19 nov. 2011
+ */
 OBJECTS.path = function(){
     
     var path = this;
@@ -10,34 +14,68 @@ OBJECTS.path = function(){
     
     this.list = [];
     
+    /**
+     * Add a nodeCode to the path
+     * @param {nodeCode} nodeCode
+     */
     this.addList = function(nodeCode){
         this.list.push(nodeCode);
     };
     
+    /**
+     * Return the first nodeCode of the path
+     * Caution : the path is in reverse order
+     * @returns {nodeCode} 
+     */
     this.getFirst = function(){
         return this.list[this.list.length -1 ];
     };
     
+    /**
+     * Return the last nodeCode of the path 
+     * Caution : the path is in reverse order
+     * @returns {nodeCode} 
+     */
     this.getLast = function(){
         return this.list[0];
     };
     
+    /**
+     * Delete the first nodeCode of the path 
+     * Caution : the path is in reverse order 
+     */
     this.delFirst = function(){ // table is in reverse order
         this.list.pop();
     };
     
+    /**
+     * Get the path Array of nodeCode ( reverse the array to have it in the "correct" order )
+     * @returns {Array}
+     */
     this.getPath = function(){
         return this.list.reverse(); // table is in reverse order 
     };
     
+    /**
+     * Get the size of the path (number of nodeCodes in it)
+     * @returns {number}
+     */
     this.getSize = function(){
         return path.list.length;
     };
     
+    /**
+     * Make the path empty
+     */
     this.reset = function(){
         this.list.length = 0;
     };
 
+    /**
+     * Try to recalculate the path from the actual position to the destination
+     * @param {RTSitem} unit 
+     * @returns {number} // 1 work , 0 have to retry (not sure) , -1 definitely impossible (not sure i don't remember)  
+     */
     this.recalculatePartially = function(unit){
         
         var actualNodeCode = unit.getNodeCode();
@@ -58,7 +96,7 @@ OBJECTS.path = function(){
                     friendlyUnitBlock: true
                 };
                 
-                // on recalcule entre le nouveau premier point et le point actuel 
+                // we recalculate between the new first point and the actual point 
                 if(path.reversePathfinding){
                     log('reversing logic');
                     options.forceWalkableBoundary = true;
@@ -97,7 +135,8 @@ OBJECTS.path = function(){
             var options = {
                 friendlyUnitBlock: true
             };
-            // on recalcule entre le nouveau premier point et le point actuel 
+            
+            // we recalculate between the new first point and the actual point 
             if(path.reversePathfinding){
                 log('reversing logic');
                 options.forceWalkableBoundary = true;
@@ -120,13 +159,18 @@ OBJECTS.path = function(){
         return 0;
     };
     
+    /**
+     * Is the path still walkable somewhere, returns the length to the first walkable element
+     * @param {RTSitem} unit 
+     * @returns {number} 0 = none walkable element 
+     */
     this.isThereWalkable = function(unit){       
         var walkableFound = 0;
         path.list.reverse();        
         $.each(path.list,function(k,code){
             if( path.getMap().isWalkable(code,unit).value > 0 ){
                 walkableFound = k;
-                return false;
+                return false; // stop the each
             }
         });
         path.list.reverse();
@@ -134,6 +178,11 @@ OBJECTS.path = function(){
         return walkableFound; 
     };
     
+    /**
+     * Delete every element of the path to the first walkable element 
+     * @param {RTSitem} unit
+     * @returns {Boolean}
+     */
     this.deleteUntilWalkable = function(unit){
 
         var walkableFound = false;
@@ -141,7 +190,7 @@ OBJECTS.path = function(){
         $.each(path.list,function(k,code){
             if( path.getMap().isWalkable(code,unit).value > 0 ){
                 walkableFound = true;
-                return false;
+                return false; // stop the each
             }else path.list.shift();
         });
         path.list.reverse();

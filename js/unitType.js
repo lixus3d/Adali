@@ -1,4 +1,6 @@
-
+/**
+ * Every rules related to units 
+ */
 RULES.unit = {
 
 	/*
@@ -20,7 +22,7 @@ RULES.unit = {
 	},
 
 	/*
-     * TANK
+     * TANKS
      */
 	tank: {
 		sType: 'vehicule',
@@ -65,7 +67,7 @@ RULES.unit = {
 	},
 
 	/*
-     * HELICOPTER
+     * HELICOPTERS
      */
 	komX: {
 		sType: 'aerial',

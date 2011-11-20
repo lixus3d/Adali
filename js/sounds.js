@@ -1,8 +1,16 @@
-
+/**
+ * Helper for playing sounds 
+ * @returns {OBJECTS.sounds}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.sounds = function(){
     
     var sounds = this;
     
+    /**
+     * List of available sounds 
+     */
     this.audioFiles = {
         move: 6,
         moving: 3,
@@ -17,16 +25,23 @@ OBJECTS.sounds = function(){
     this.channel = 0;
     this.maxChannel = 8;
     
+    /**
+     * Init the sounds object 
+     */
     this.init = function(){
+    	
         // preloading all sounds
         $.each(sounds.audioFiles,function(filename,count){
             for(var i=1;i<=count;i++){
                 $('body').append($('<audio src="./sounds/'+filename+''+i+'.wav" preload="auto"></audio>'));            
             }
         });
+        
     };
     
-    
+    /** 
+     * Play a particular sound ( by it's filename, without the number) 
+     */
     this.play = function(filename){
         var count = sounds.audioFiles[filename];
         i = 1 + Math.floor(Math.random()*(count-0.1));

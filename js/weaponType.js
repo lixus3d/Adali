@@ -1,6 +1,12 @@
-
+/**
+ * Every rules related to weapons 
+ */
 RULES.weapon = {
     
+	/*
+	 * CANONS
+	 */
+		
     '90mm': {
        damage : 50, 
        speed: 100,

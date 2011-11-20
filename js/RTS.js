@@ -1,6 +1,3 @@
-/**
- * @author Lixus3d <developpement@adreamaline.com>
- */
 
 /**
  * Base RTS object, contains some default configuration
@@ -35,6 +32,12 @@ var RULES = {
 	 * Defines RTS basic configuration
 	 */
 	config: {
+		pathfinderUnitPenalityFriend: 40,
+		pathfinderUnitPenalityEnemy: 200,
+		pathfinderBuildingPenality: 250,
+		
+		projectileTickMultiplier: 5,
+		
 		sightStaticMultiplier: 1.1
 	}
 		
@@ -63,7 +66,7 @@ OBJECTS.baseObject.prototype.getRts = function(){
 
 /**
  * Return the rules object that defines every rules of the RTS
- * @returns {RULES} Every rules of the RTS
+ * @return {RULES} Every rules of the RTS
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 19 nov. 2011
  */
@@ -73,7 +76,22 @@ OBJECTS.baseObject.prototype.getRules = function(){
     }else throw 'RULES is not defined, but prototype.getRules() called.';
 };
 
-
+/**
+ * Return the RTS map anywhere 
+ * @returns {OBJECTS.map}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.baseObject.prototype.getMap = function(){
     return this.getMotor().map;
+};
+
+/**
+ * Return the RTS motor anywhere 
+ * @returns {OBJECTS.motor}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
+OBJECTS.baseObject.prototype.getMotor = function(){
+    return this.getRts().motor;
 };

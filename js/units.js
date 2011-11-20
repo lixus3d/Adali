@@ -1,3 +1,9 @@
+/**
+ * Units list of the RTS 
+ * @returns {OBJECTS.units}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 
 OBJECTS.units = function(){
     
@@ -12,6 +18,10 @@ OBJECTS.units = function(){
 //        })       
 //    };    
     
+    /**
+     * Add a unit to the units list and activate the unit
+     * @param {RTSitem} unit 
+     */
     this.addUnit = function(unit){
         this.list.push(unit) ;         
         unit.setId(this.list.length-1);
@@ -19,6 +29,10 @@ OBJECTS.units = function(){
         unit.activate();
     };
     
+    /**
+     * Kill a unit, update the list, update the current selection
+     * @param {number} unitId
+     */
     this.killUnit = function(unitId){
         
         // get normal list position 
@@ -30,6 +44,9 @@ OBJECTS.units = function(){
         this.getMotor().selection.update();        
     };
     
+    /**
+     * Execute every unit tick when tick is triggered by the motor tick
+     */
     this.tick = function(){
         //log(units.list);
         $.each(units.getMotor().units.list,function(k,unit){
@@ -39,6 +56,11 @@ OBJECTS.units = function(){
         });       
     };
     
+    /**
+     * Return a list of unit in the selector area if presents
+     * @param {selector} selector
+     * @return {Array}
+     */
     this.searchInSelector = function(selector){
         
         var search = [];
