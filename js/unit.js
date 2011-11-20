@@ -1,4 +1,14 @@
-
+/**
+ * Unit object 
+ * @param {Number} x
+ * @param {Number} y
+ * @param {OBJECTS.team} team
+ * @param {String} unitType
+ * @param {Object} options
+ * @returns {OBJECTS.unit}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.unit = function(x,y,team,unitType,options) {
 
     this.toString = function(){return 'unitObject';}; // String translation of the object
@@ -43,11 +53,17 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     this.weapons = [];
     this.weaponsTypeFire = [];
 
-
-    /*
-     * Methods
+    
+    /**
+     * Init the unit object 
+     * @param {Number} x
+     * @param {Number} y
+     * @param {OBJECTS.team} team
+     * @param {String} unitType
+     * @param {Object} options
+     * @author Lixus3d <developpement@adreamaline.com>
+     * @date 20 nov. 2011
      */
-
     this.init = function(x,y,team,unitType,options){
         if( unitOptions = this.getRules().unit[unitType]){
             this.vars = $.extend(this.vars,unitOptions);
@@ -59,6 +75,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.initWeapon();
     };
 
+    /**
+     * Activate the unit : draw and control 
+     */
     this.activate = function(){
         this.draw();
         this.activateControl();
@@ -68,6 +87,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
 //        log(this.getRts().UTILS.relPosToNodePos(this.getRts().UTILS.absToRel(this.getPosition(),this.getMap().nodeZero),this.getRts().isoSize));
     };
 
+    /**
+     * Kill the unit 
+     */
     this.kill = function(){
         if(this.inLife){
             this.life = 0;
@@ -79,7 +101,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.getMotor().units.killUnit(this.getId());
     };
 
-
+    /**
+     * Create the dom for a unit 
+     */
     this.makeDom = function(){
         if(this.vars.turret){
             this.dom = $('<div id="unit-'+this.id+'" class="unit '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic default"><div class="turret default"></div></div></div>');
@@ -92,14 +116,19 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.selectDom = this.dom.find('.selectZone');
     };
 
+    /**
+     * Activate the control of a unit 
+     */
     this.activateControl = function(){
 
+    	// Player unit are selectable 
         if(unit.team.vars.player){
             unit.selectDom.click(function(){
                 unit.getMotor().selection.addSelection(unit);
                 return false;
             });
         }else{
+        	// Enemy units are attackable 
             unit.dom.hover(function(){
                 if(unit.getMotor().selection.getSize()){
                     unit.dom.addClass('attackCursor');
@@ -118,6 +147,11 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
     };
 
+    /**
+     * Make the unit perform an action
+     * @param {actionObject} action
+     * @param {Number} indexInSelection
+     */
     this.doAction = function(action,indexInSelection){
         switch(action.type){
             default:
@@ -148,6 +182,12 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
     };
 
+    /**
+     * Tell the unit to go to a particular position
+     * @param {posObject} position
+     * @param {String} mode Either "move" or "attack" 
+     * @param {Object} options
+     */
     this.moveTo = function(position,mode,options){
 
         this.lastDestination = null; // there is no more last destination
@@ -194,6 +234,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
     };
 
+    /**
+     * Execute it every motor tick, move the unit and watch for enemy insight 
+     */
     this.tick = function(){
 
         this.move();
@@ -220,6 +263,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
     };
 
+    /**
+     * Move the unit on the map, if the unit has a path and a destination 
+     */
     this.move = function(){
 
         var RTS = this.getRts();
@@ -371,6 +417,10 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
     };
 
+    /**
+     * Stop the movement of the unit 
+     * @returns {Boolean}
+     */
     this.stopMove = function(text){
         this.wait.time = 0;
         this.wait.retry = 0;
@@ -384,6 +434,11 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         return true;
     };
 
+    /** 
+     * Attack a particular target 
+     * TODO : Check if the target is still insight 
+     * @param {RTSitem} target
+     */
     this.attack = function(target){
 
         if(target != undefined){
@@ -402,6 +457,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     // this.target = null; // to stop attacking
     };
 
+    /**
+     *  Set the body direction of the unit 
+     */
     this.setDirection = function(direction,force){
 
         if(force == undefined) force = false;
@@ -416,6 +474,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.lastOrientation = orientation;
     };
 
+    /**
+     * Set the turret direction of the unit 
+     */
     this.setTurretDirection = function(direction,force){
         if(this.vars.turret){
             if(force == undefined) force = false;
@@ -432,8 +493,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         }
     };
 
-
-
+    // Init the unit when instantiate
     this.init(x,y,team,unitType,options);
 
 };

@@ -1,4 +1,14 @@
-
+/**
+ * Building object 
+ * @param {Number} x
+ * @param {Number} y
+ * @param {OBJECTS.team} team
+ * @param {String} buildingType
+ * @param {Object} options
+ * @returns {OBJECTS.unit}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
 OBJECTS.building = function(x,y,team,buildingType,options) {
 
     this.toString = function(){return 'buildingObject';}; // String translation of the object
@@ -47,7 +57,14 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     /*
      * Methods
      */
-
+    /**
+     * Init a building object 
+     * @param {Number} x
+     * @param {Number} y
+     * @param {OBJECTS.team} team
+     * @param {String} buildingType
+     * @param {Object} options
+     */
     this.init = function(x,y,team,buildingType,options){
         if( buildingOptions = this.getRules().building[buildingType]){
             this.vars = $.extend(this.vars,buildingOptions);
@@ -57,10 +74,13 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         this.vars = $.extend(this.vars,options);
         this.life = this.vars.life;
         this.initWeapon();
-//        this.initPower(); // Drain or product so
-//        this.initConstruction();
+        this.initPower(); // Drain or product so
+        this.initConstruction(); // init construction possibility
     };
 
+    /**
+     * Activate the building : draw and control 
+     */
     this.activate = function(){
         this.draw();
         this.activateControl();
@@ -72,16 +92,37 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
     };
 
+    /**
+     * Init the power drain and/or production of the building
+     */
 	this.initPower = function(){
 
 	};
+	
+	/**
+	 * Reset the power drain and/or production of the building 
+	 */
+	this.resetPower = function(){
+		
+	};
 
+	/**
+	 * Init the construction possibility of the building 
+	 */
 	this.initConstruction = function(){
 
 	};
 
-    /*
+	/**
+	 * Reset the construction possibility of the building  
+	 */
+	this.resetConstruction = function(){
+		
+	};
+	
+    /**
      * Return the footprint of the building (nodeCode occuped by the building
+     * @returns {Array} nodeCodes
      */
     this.getFootprintNodeCode = function(){
 
@@ -98,10 +139,15 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         return nodeCodes;
     };
 
+    /**
+     * Kill the building 
+     */
     this.kill = function(){
         if(this.inLife){
             this.life = 0;
             this.inLife = false;
+            this.resetPower();
+            this.resetConstruction();
             this.dom.remove();
             //this.dom.html('KILL');
             this.getMotor().sounds.play('explosion');
@@ -110,6 +156,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     };
 
 
+    /**
+     * Create the dom for the building 
+     */
     this.makeDom = function(){
         if(this.vars.turret){
             this.dom = $('<div id="building-'+this.id+'" class="building '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic bottomright"><div class="turret default"></div></div></div>');
@@ -122,6 +171,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         this.selectDom = this.dom.find('.selectZone');
     };
 
+    /**
+     * Activate building control 
+     */
     this.activateControl = function(){
 
         if(building.team.vars.player){
@@ -148,6 +200,11 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
     };
 
+    /**
+     * Perform action on the actual building
+     * @param {action} action
+     * @param {Number} indexInSelection 
+     */
     this.doAction = function(action,indexInSelection){
 
         var UTILS = this.getMotor().UTILS;
@@ -170,6 +227,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 
     };
 
+    /**
+     * Does a building can move ? maybe 
+     */
     this.moveTo = function(position,mode,options){
 
         this.lastDestination = null; // there is no more last destination
@@ -214,6 +274,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
     };
 
+    /**
+     * Perform building tick 
+     */
     this.tick = function(){
 
         this.move();
@@ -240,6 +303,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
     };
 
+    /**
+     * Move the building ... ??
+     */
     this.move = function(){
         if(this.destination && this.path){
 
@@ -387,6 +453,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }
     };
 
+    /**
+     * Stop the building from moving ...
+     */
     this.stopMove = function(text){
         this.wait.time = 0;
         this.wait.retry = 0;
@@ -400,6 +469,10 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         return true;
     };
 
+    /**
+     * Make the building attack a particular target
+     * @param {RTSitem} target
+     */
     this.attack = function(target){
 
         if(target != undefined){
@@ -418,6 +491,11 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     // this.target = null; // to stop attacking
     };
 
+    /**
+     * Set the building direction
+     * @param {vectorObject} direction
+     * @param {Boolean} force 
+     */
     this.setDirection = function(direction,force){
 
         if(force == undefined) force = false;
@@ -432,6 +510,11 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         this.lastOrientation = orientation;
     };
 
+    /**
+     * Set the building turret direction
+     * @param {vectorObject} direction
+     * @param {Boolean} force 
+     */
     this.setTurretDirection = function(direction,force){
         if(this.vars.turret){
             if(force == undefined) force = false;
@@ -449,7 +532,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     };
 
 
-
+    // Init the building when instantiate
     this.init(x,y,team,buildingType,options);
 
 };
