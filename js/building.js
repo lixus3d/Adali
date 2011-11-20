@@ -113,7 +113,10 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
 	 * Reset the power drain and/or production of the building 
 	 */
 	this.resetPower = function(){
-		
+		if(this.vars.powerProduce)
+			building.getMotor().ressources.addPower(-this.vars.powerProduce);
+		if(this.vars.powerDrain)
+			building.getMotor().ressources.addConsumption(-this.vars.powerDrain);
 	};
 
 	/**
@@ -162,7 +165,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
             //this.dom.html('KILL');
             this.getMotor().sounds.play('explosion');
         }
-        this.getMotor().buildings.killbuilding(this.getId());
+        this.getMotor().buildings.killBuilding(this.getId());
     };
 
 
