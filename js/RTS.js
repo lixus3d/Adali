@@ -38,7 +38,9 @@ var RULES = {
 		
 		projectileTickMultiplier: 5,
 		
-		sightStaticMultiplier: 1.1
+		sightStaticMultiplier: 1.1,
+		
+		startingCredits: 3000
 	}
 		
 };

@@ -13,7 +13,7 @@ OBJECTS.unitTesting = function(){
      * Launch the test process 
      */
     this.doTest = function(){
-        
+    	
         log('do some unit tests');
         
        /*

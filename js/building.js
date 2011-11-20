@@ -42,7 +42,12 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
      * building configuration;
      */
     this.vars = {
+		sType: 'building',
+		type: 'helipad',
+		price: 2000,		
         life: 1500,
+		powerDrain: 100,
+		powerProduce: 300,        
         turnRatio: 0, // don't used for now
         speed: 0, // moving speed
         sight: 5, // view up to x nodes
@@ -96,7 +101,12 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
      * Init the power drain and/or production of the building
      */
 	this.initPower = function(){
-
+		if(window.RTS){ // to avoid testing problem
+			if(this.vars.powerProduce)
+				building.getMotor().ressources.addPower(this.vars.powerProduce);
+			if(this.vars.powerDrain)
+				building.getMotor().ressources.addConsumption(this.vars.powerDrain);
+		}		
 	};
 	
 	/**
@@ -207,14 +217,15 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
      */
     this.doAction = function(action,indexInSelection){
 
-        var UTILS = this.getMotor().UTILS;
+        var UTILS = this.getRts().UTILS;
 
         switch(action.type){
             default:
             case 'default':
             case 'waypoint':
             case 'moveTo':
-                this.waypoint = UTILS.absToRel(action.position);
+                this.waypoint = UTILS.absToRel(action.position,building.getMap().nodeZero);
+                log(this.waypoint);
                 break;
             case 'attack':
                 if(this.inSight(action.target.getPosition())){
@@ -228,7 +239,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     };
 
     /**
-     * Does a building can move ? maybe 
+     * Does a building can move ? maybe ...
      */
     this.moveTo = function(position,mode,options){
 

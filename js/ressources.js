@@ -8,10 +8,10 @@ OBJECTS.ressources = function(){
 
     var ressources = this;
 
-    ressources.powerProduction = 300;
-    ressources.powerConsumption = 100;
+    ressources.powerProduction = 0;
+    ressources.powerConsumption = 0;
 
-    ressources.credits = 3000;
+    ressources.credits = ressources.getRules().config.startingCredits;
 
     /**
      * Add some credits

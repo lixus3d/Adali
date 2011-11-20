@@ -11,7 +11,8 @@ RULES.building = {
 		type: 'construction',
 		price: 3000,
 		life: 3000,
-		power: -50,
+		powerDrain: 100,
+		powerProduce: 300,
 		turret: false,
 		speed: 0,
 		sight: 10, // view up to x nodes
@@ -30,7 +31,8 @@ RULES.building = {
 		type: 'power',
 		price: 400,
 		life: 1200,
-		power: 700,
+		powerDrain: 10,
+		powerProduce: 700,
 		turret: false,
 		speed: 0,
 		sight: 4, // view up to x nodes
@@ -47,7 +49,8 @@ RULES.building = {
 		type: 'refinery',
 		price: 2000,
 		life: 2000,
-		power: -400,
+		powerDrain: 400,
+		powerProduce: 0,
 		turret: false,
 		speed: 0,
 		sight: 5, // view up to x nodes
@@ -64,7 +67,8 @@ RULES.building = {
 		type: 'factory',
 		price: 2000,
 		life: 2500,
-		power: -500,
+		powerDrain: 500,
+		powerProduce: 0,
 		turret: false,
 		speed: 0,
 		sight: 2, // view up to x nodes
@@ -81,7 +85,8 @@ RULES.building = {
 		type: 'helipad',
 		price: 2000,
 		life: 2500,
-		power: -350,
+		powerDrain: 375,
+		powerProduce: 0,
 		turret: false,
 		speed: 0,
 		sight: 6, // view up to x nodes

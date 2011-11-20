@@ -40,15 +40,21 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
      * Unit configuration;
      */
     this.vars = {
+    	sType: 'vehicule',
+    	price: 3000,
         life: 500,
         turnRatio: 0.5, // don't used for now
         speed: 1, // moving speed
         sight: 4, // view up to x nodes
         imageClass: '',//css class to use
+    	movement: 'tank',
         turret: false,
-        weapon: ['90mm'],
-        requiredType: []
+        weapon: [],
+        requiredType: [],
+        deploy: 'constructionSite',
+        constructionSite: 'factory'
     };
+    
     // Weapons
     this.weapons = [];
     this.weaponsTypeFire = [];
