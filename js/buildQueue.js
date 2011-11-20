@@ -58,6 +58,9 @@ OBJECTS.buildQueue = function(){
     
     /**
      * Launch/Continue construction, actually construct unit by unit (not by subType)
+     * TODO : Construct subType by subType
+     * TODO : Construct slowly when no power
+     * TODO : Consume credit 5 by 5
      */
     this.construct = function(){    
     	
