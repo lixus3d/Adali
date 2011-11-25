@@ -2,7 +2,6 @@
 
 /**
  * Tiny script that performs the construction of my buildings and units sprites
- * Just use for the smallPower for now
  */
 
 $error = null;
@@ -37,7 +36,7 @@ if(isset($_GET['spritename']) && $spritename = $_GET['spritename']){
 <!DOCTYPE HTML>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     </head>
     <body>
         <?=$error?'<b>'.$error.'</b>':''?>
@@ -46,7 +45,7 @@ if(isset($_GET['spritename']) && $spritename = $_GET['spritename']){
         <? } ?>
         <form action="" method="get">
             <input type="text" name="spritename" value="<?=isset($spritename)?$spritename:''?>" />
-            <input type="submit" name="submitter" value="GÃ©nÃ©rer" />
+            <input type="submit" name="submitter" value="Générer" />
         </form>
 
     </body>

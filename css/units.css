@@ -118,12 +118,6 @@
     z-index: 150000;
 }
 
-.building.smallPower .graphic{
-    width:128px;
-    height:128px;
-    background-image: url('../img/smallPower.png');
-}
-
 .building .default {background-position: 0 -1024px}
 .building .top {background-position: 0 -256px}
 .building .right {background-position: 0 0;}
@@ -137,3 +131,22 @@
 .building .bottomright {background-position: 0 -896px;}
 .building .bottomLeft,
 .building .bottomleft {background-position: 0 -640px;}
+
+
+.building.smallPower .graphic{
+    width:128px;
+    height:128px;
+    background-image: url('../img/smallPower.png');
+}
+
+.building.factory .graphic{
+    width:128px;
+    height:128px;
+    background-image: url('../img/factory.png');
+}
+
+.building.constructionSite .graphic{
+    width:128px;
+    height:128px;
+    background-image: url('../img/constructionSite.png');
+}

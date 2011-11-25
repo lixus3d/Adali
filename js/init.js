@@ -61,9 +61,11 @@
     RTS.motor.units.addUnit(new OBJECTS.unit(120,120,team1,'heavyTank'));
     RTS.motor.units.addUnit(new OBJECTS.unit(200,80,team1,'artilleryTank'));
 
-    RTS.motor.buildings.addBuilding(new OBJECTS.building(256,308,team1,'smallPower'));
+    RTS.motor.buildings.addBuilding(new OBJECTS.building(128,208,team1,'constructionSite'));
     RTS.motor.buildings.addBuilding(new OBJECTS.building(128,308,team1,'smallPower'));
-    RTS.motor.buildings.getItemById(1).primary = true;
+    RTS.motor.buildings.addBuilding(new OBJECTS.building(256,308,team1,'factory'));
+    
+    //RTS.motor.buildings.getItemById(1).primary = true;
 
 
     RTS.motor.units.addUnit(new OBJECTS.unit(840,350,team2,'tank'));

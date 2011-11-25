@@ -74,6 +74,7 @@ RULES.building = {
 		sight: 2, // view up to x nodes
 		imageClass: 'factory',
 		weapon: [],
+		footprint: [[1,0],[0,-1],[1,-1]], // ground foot print , determine wich node is occupied by the building
 		requiredType: ['power','refinery']
 	},
 

@@ -148,6 +148,8 @@ OBJECTS.buildQueue = function(){
     
     /**
      * Create the RTSitem, find native position, add to the motor
+     * TODO : try to find a better solution than + 55 for the unit to appear
+     * TODO : put the team start position if we don't find the construction site
      * @param {string} elementName
      * @param {team} team  
      */
@@ -155,7 +157,7 @@ OBJECTS.buildQueue = function(){
     	
     	var elementName = queueObject.elementName;
     	var team = queueObject.team;    	
-    	var nativePosition = {x: 0, y: 0};
+    	var nativePosition = {x: 25, y: 25}; // default position if we can't find the construction site 
     	
     	if(queueObject.vars.constructionSite){ // the item is construct in a particular building 
     		// try to get the building

@@ -25,7 +25,7 @@ RULES.unit = {
      * TANKS
      */
 	tank: {
-		sType: 'infantry',
+		sType: 'vehicule',
 		price: 500,
 		life: 500,
 		turret: true,
@@ -34,7 +34,7 @@ RULES.unit = {
 		imageClass: 'tank',
 		weapon: ['90mm'],
 		movement: 'tank',
-		constructionSite: 'smallPower',
+		constructionSite: 'factory',
 		requiredType: ['factory']
 	},
 
