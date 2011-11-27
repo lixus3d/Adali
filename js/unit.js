@@ -50,6 +50,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         imageClass: '',//css class to use
     	movement: 'tank',
         turret: false,
+        rotor: false,
         weapon: [],
         requiredType: [],
         deploy: 'constructionSite',
@@ -81,6 +82,10 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         this.vars = $.extend(this.vars,options);
         this.life = this.vars.life;
         this.initWeapon();
+        if(this.vars && this.vars.movement == 'helicopter'){
+        	this.yOffset = -48;   
+        	this.zIndexOffset = 2000;
+        }
     };
     
     /**
@@ -113,12 +118,24 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
      * Create the dom for a unit 
      */
     this.makeDom = function(){
+    	
         if(this.vars.turret){
             this.dom = $('<div id="unit-'+this.id+'" class="unit '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic default"><div class="turret default"></div></div></div>');
             this.turretDom = this.dom.find('.turret');
         }else{
             this.dom = $('<div id="unit-'+this.id+'" class="unit '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic default"></div></div>');
         }
+        
+        if(this.vars.rotor){
+        	this.dom.find('.graphic.default').append('<div class="rotor subItem default"></div>');
+        	
+        	this.rotorDom = this.dom.find('.rotor');
+        }
+        
+        if(this.yOffset != 0){
+        	this.dom.find('.graphic.default').append('<div class="shadow subItem default" style="top:' + -unit.yOffset + 'px"></div>');
+        }
+        
         $('.units').append(this.dom);
         this.graphicDom = this.dom.find('.graphic');
         this.selectDom = this.dom.find('.selectZone');

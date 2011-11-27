@@ -85,8 +85,15 @@ OBJECTS.map = function(size) {
          * 3 = Building
          * ...
          */
-
-        var isWalkable = {value: 1, error: 0, infos: {}};
+    	
+    	var isWalkable = {value: 1, error: 0, infos: {}};
+    	
+    	// Aerial units can move anywhere
+    	if(unit.vars.movement == 'helicopter'){
+    		return isWalkable;
+    	}
+    	
+        
         switch(true){
             case (this.isWall(nodeCode)):
                 isWalkable.value = 0; // 0 = wall, water, tree
@@ -121,9 +128,14 @@ OBJECTS.map = function(size) {
     /**
      * Does we see thru the given nodeCode
      * @param {nodeCode} nodeCode
+     * @param {RTSitem} actualUnit
      * @returns {Boolean}
      */
-    this.isSightable = function(nodeCode){
+    this.isSightable = function(nodeCode,actualUnit){
+    	
+    	if(actualUnit.vars && actualUnit.vars.movement == 'helicopter'){
+    		return true;
+    	}
         switch(true){
             case this.isWall(nodeCode):
 //            case (this.isUnitAtCode(nodeCode,unit)): // we can fire or view thru unit ( yes ;), why not ^^ )

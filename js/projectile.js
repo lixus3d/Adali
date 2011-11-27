@@ -29,7 +29,7 @@ OBJECTS.projectile = function(weapon,target){
         this.weapon = weapon;
         this.target = target;
         this.x = weapon.parent.x;
-        this.y = weapon.parent.y;
+        this.y = weapon.parent.y + weapon.parent.yOffset;
     };
     
     /**

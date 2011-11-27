@@ -11,7 +11,7 @@ RULES.unit = {
 		price: 3000,
 		life: 500,
 		turret: false,
-		speed: 35,
+		speed: 25,
 		sight: 4, // view up to x nodes
 		imageClass: 'mcv',
 		weapon: [],
@@ -53,7 +53,7 @@ RULES.unit = {
 	},
 
 	artilleryTank: {
-		sType: 'aerial',
+		sType: 'vehicule',
 		price: 800,
 		life: 400,
 		turret: false,
@@ -73,7 +73,7 @@ RULES.unit = {
 		sType: 'aerial',
 		price: 1200,
 		life: 500,
-		turret: true,
+		turret: false,
 		rotor: true,
 		speed: 45,
 		sight: 6, // view up to x nodes

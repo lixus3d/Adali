@@ -188,7 +188,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         }else{
             this.dom = $('<div id="building-'+this.id+'" class="building '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic bottomright"></div></div>');
         }
-        $('.buildings').append(this.dom);
+        $('.units').append(this.dom);
         this.graphicDom = this.dom.find('.graphic');
         this.selectDom = this.dom.find('.selectZone');
     };

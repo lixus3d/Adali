@@ -15,6 +15,8 @@ ABSTRACTS.itemAbstract = function(){
     this.y = 0;    
     this.unitSize = 64; 
     this.centerOffset = this.unitSize/-2;
+    this.yOffset = 0;
+    this.zIndexOffset = 0;
     this.team = null;
     this.selected = false;
     
@@ -100,11 +102,16 @@ ABSTRACTS.itemAbstract = function(){
         
         this.dom.css({
             left: (this.x - item.unitSize/2),
-            top: (this.y - item.unitSize/1.8)
-        });      
-        this.graphicDom.css({
-           zIndex: 1000 + this.y 
+            top: (this.y - item.unitSize/1.8) + this.yOffset
+        });    
+        
+        this.dom.css({
+           zIndex: Math.ceil(1000 + this.y + this.zIndexOffset)
         });
+        
+        this.selectDom.css({
+            zIndex: Math.ceil(2000000 + this.y)
+         });
         
     };
     
@@ -229,7 +236,7 @@ ABSTRACTS.itemAbstract = function(){
                 y += height/divider ;
                 cPosition.x = Math.floor(x);
                 cPosition.y = Math.floor(y);
-                if(!this.getMap().isSightable(this.getRts().UTILS.getPointCode(this.getMotor().convertToNodePosition(cPosition)))) return false;                
+                if(!this.getMap().isSightable(this.getRts().UTILS.getPointCode(this.getMotor().convertToNodePosition(cPosition)),this)) return false;                
             }               
             
             return true;

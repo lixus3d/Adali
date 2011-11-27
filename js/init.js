@@ -55,11 +55,13 @@
     RTS.motor.teams.addTeam(team2);
 
     // Create some unit
-    RTS.motor.units.addUnit(new OBJECTS.unit(80,80,team1,'tank'));
+    RTS.motor.units.addUnit(new OBJECTS.unit(80,80,team1,'mcv'));
     RTS.motor.units.addUnit(new OBJECTS.unit(120,80,team1,'tank'));
     RTS.motor.units.addUnit(new OBJECTS.unit(80,120,team1,'heavyTank'));
     RTS.motor.units.addUnit(new OBJECTS.unit(120,120,team1,'heavyTank'));
+    RTS.motor.units.addUnit(new OBJECTS.unit(200,120,team1,'komX'));
     RTS.motor.units.addUnit(new OBJECTS.unit(200,80,team1,'artilleryTank'));
+    
 
     RTS.motor.buildings.addBuilding(new OBJECTS.building(128,208,team1,'constructionSite'));
     RTS.motor.buildings.addBuilding(new OBJECTS.building(128,308,team1,'smallPower'));

@@ -12,13 +12,17 @@ OBJECTS.sounds = function(){
      * List of available sounds 
      */
     this.audioFiles = {
+    	artillery: 3,
+        attack: 5,
+        canon: 3,
+        explosion: 3,
+        missile: 2,
         move: 6,
         moving: 3,
-        attack: 5,
-        fire: 3,
-        explosion: 3,
-        select: 5,
-        ready: 1
+        ready: 1,
+        rifle: 3,
+        rocket: 2,
+        select: 5
     };
     
     this.channels = [];

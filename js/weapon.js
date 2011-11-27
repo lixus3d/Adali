@@ -48,7 +48,7 @@ OBJECTS.weapon = function(type,options,parent){
         if(this.reloaded){
             if(!this.projectile){
                 this.projectile = new OBJECTS.projectile(weapon,target);
-                this.getMotor().sounds.play('fire');
+                this.getMotor().sounds.play(this.vars.sound);
                 this.reload();
                 return true;
             }

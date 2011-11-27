@@ -54,6 +54,15 @@
     opacity:0.9;
 }
 
+.unit .graphic .shadow{
+    position:absolute;
+    display:block;
+    width:64px;
+    height:64px; 
+    background-repeat:no-repeat;
+    z-index: 5000;
+}
+
 .unit .graphic .turret{
     position:absolute;
     display:block;
@@ -61,6 +70,19 @@
     height:64px; 
     background-repeat:no-repeat;
     z-index: 5000;
+}
+
+.unit .graphic .rotor{
+    position:absolute;
+    display:block;
+    width:64px;
+    height:64px; 
+    background-repeat:no-repeat;
+    z-index: 5000;
+}
+
+.unit.mcv .graphic{ 
+    background-image: url('../img/mcv.png');
 }
 
 .unit.tank .graphic{ 
@@ -81,25 +103,60 @@
     background-image: url('../img/artilleryTank.png');
 }
 
+.unit.komX .graphic{ 
+    background-image: url('../img/komX.png');
+}
+.unit.komX .graphic .rotor{ 
+    background-image: url('../img/komXRotor.png');
+}
+.unit.komX .graphic .shadow{ 
+    background-image: url('../img/komXShadow.png');
+}
+
+
 .projectile.shell{
     background-image: url('../img/shell.png');
     width:5px;
     height:5px; 
 }
+.projectile.rocket{
+    background-image: url('../img/rocket.png');
+    width:4px;
+    height:4px; 
+}
+.projectile.bullet{
+    background-image: url('../img/bullet.png');
+    width:2px;
+    height:2px; 
+}
 
-.default {background-position: -64px -64px}
-.top {background-position: -64px 0px;}
-.right {background-position: -128px -64px;}
-.bottom {background-position: -64px -128px;}
-.left {background-position: 0 -64px;}
+.default {background-position: 0 -512px}
+.top {background-position: 0 -128px}
+.right {background-position: 0 0;}
+.bottom {background-position: 0 -384px;}
+.left {background-position: 0 -256px;}
 .topLeft,
-.topleft {background-position: 0 0;}
+.topleft {background-position: 0 -192px;}
 .topRight,
-.topright {background-position: -128px 0px;}
+.topright {background-position: 0 -64px;}
 .bottomRight,
-.bottomright {background-position: -128px -128px;}
+.bottomright {background-position: 0 -448px;}
 .bottomLeft,
-.bottomleft {background-position: 0 -128px;}
+.bottomleft {background-position: 0 -320px;}
+
+.default .subItem {background-position: 0 -512px}
+.top .subItem {background-position: 0 -128px}
+.right .subItem {background-position: 0 0;}
+.bottom .subItem {background-position: 0 -384px;}
+.left .subItem {background-position: 0 -256px;}
+.topLeft .subItem,
+.topleft .subItem {background-position: 0 -192px;}
+.topRight .subItem,
+.topright .subItem {background-position: 0 -64px;}
+.bottomRight .subItem,
+.bottomright .subItem {background-position: 0 -448px;}
+.bottomLeft .subItem,
+.bottomleft .subItem {background-position: 0 -320px;}
 
 
 
