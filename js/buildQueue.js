@@ -11,7 +11,9 @@ OBJECTS.buildQueue = function(){
     
     buildQueue.actualConstruction = {};
     buildQueue.queue = {}; // queue by subType  
-    buildQueue.queueQuantity = {};    
+    buildQueue.queueQuantity = {}; 
+   
+    buildQueue.readyQueue = {}; // elements ready to place 
     
     /**
      * Add something to a queue
@@ -35,8 +37,40 @@ OBJECTS.buildQueue = function(){
         if(!this.queueQuantity[elementType][elementName]) buildQueue.queueQuantity[elementType][elementName] = 0;
         this.queueQuantity[elementType][elementName]++ ;
         
+        buildQueue.getMotor().menu.updateCount(queueObject.elementName,1);
+        
         // Verbose 
         this.getMotor().say('Added to queue');
+    };
+    
+    /**
+     * Add a queueObject to the ready to place queue
+     * @param queueObject
+     */
+    this.addReadyQueue = function(elementName){
+    	if(this.readyQueue[elementName] == undefined) buildQueue.readyQueue[elementName] = [];
+    	this.readyQueue[elementName].push(1);
+    };
+    
+    /**
+     * Delete a queueObject from the ready to place queue
+     * @param queueObject
+     */
+    this.delReadyQueue = function(elementName){
+    	if(this.inReadyQueue(elementName)){
+    		//log('resetReadyQueue');
+    		this.readyQueue[elementName].length = 0;
+    	}        
+    };
+    
+    /**
+     * Indicate if a queueObject is already ready 
+     * @param {queueObject} queueObject
+     * @returns {Boolean}
+     */
+    this.inReadyQueue = function(elementName){
+    	//log(this.readyQueue);
+    	return (this.readyQueue[elementName] && this.readyQueue[elementName].length > 0) ;
     };
     
     /**
@@ -114,9 +148,9 @@ OBJECTS.buildQueue = function(){
 	        			}else return false;	    			
 		    		}            		
 		    		element.progress++;
+		    		buildQueue.getMotor().menu.updateProgress(element.elementName,element.progress/element.time);
 		        }else{
-		        	buildQueue.createItem(element);     
-		        	buildQueue.resetActualConstruction(subType);
+		        	buildQueue.readyItem(element);
 		        }
     		}	        
     	});
@@ -135,29 +169,58 @@ OBJECTS.buildQueue = function(){
         	queueObject.progress = 0;
         	buildQueue.actualConstruction[subType] = queueObject;
         }else{                
-        	buildQueue.resetActualConstruction(subType);
+        	buildQueue.resetActualConstruction(subType,queueObject.elementName);
         }    	
     };
     
     /**
      * Reset the actual item to construct
      */
-    this.resetActualConstruction = function(subType){
+    this.resetActualConstruction = function(subType,elementName){
+    	//log(subType);
     	this.actualConstruction[subType] = null;
+    	if(elementName){
+			buildQueue.getMotor().menu.updateProgress(elementName,0);
+			buildQueue.getMotor().menu.updateCount(elementName,-1);
+			buildQueue.getMotor().menu.unsetReady(elementName);
+			buildQueue.delReadyQueue(elementName);
+    	}
     };    
+    
+    /**
+     * Indicate an item is ready
+     * @param {queueObject} queueObject
+     */
+    this.readyItem = function(queueObject){
+    	var elementType = queueObject.type;
+    	
+    	if(elementType == 'unit'){
+    		this.createItem(queueObject);
+    	}else if(elementType == 'building'){
+    		if(!this.inReadyQueue(queueObject.elementName)){
+    			this.addReadyQueue(queueObject.elementName);
+    			this.getMotor().menu.setReady(queueObject.elementName);
+    		}
+    	}
+    };
     
     /**
      * Create the RTSitem, find native position, add to the motor
      * TODO : try to find a better solution than + 55 for the unit to appear
      * TODO : put the team start position if we don't find the construction site
-     * @param {string} elementName
-     * @param {team} team  
+     * @param {queueObject} queueObject
+     * @return {Boolean} 
      */
-    this.createItem = function(queueObject){   	
+    this.createItem = function(queueObject,nativePosition){   	
     	
     	var elementName = queueObject.elementName;
-    	var team = queueObject.team;    	
-    	var nativePosition = {x: 25, y: 25}; // default position if we can't find the construction site 
+    	var elementType = queueObject.type;
+    	var subType = queueObject.subType;
+    	var team = queueObject.team;    
+    	
+    	if(nativePosition == undefined){
+    		nativePosition = {x: 25, y: 25}; // default position if we can't find the construction site
+    	}
     	
     	if(queueObject.vars.constructionSite){ // the item is construct in a particular building 
     		// try to get the building
@@ -167,14 +230,16 @@ OBJECTS.buildQueue = function(){
     		}
     	}
     	
-    	log(elementName);
-    	
-    	item = new OBJECTS.unit(nativePosition.x,nativePosition.y,team,elementName);
-        this.getMotor().units.addUnit(item);
-        if(constructionSiteItem && constructionSiteItem.waypoint){
+    	item = new OBJECTS[elementType](nativePosition.x,nativePosition.y,team,elementName);
+        this.getMotor()[elementType+'s'].addItem(item);
+        
+        if(queueObject.vars.constructionSite && constructionSiteItem && constructionSiteItem.waypoint){
         	item.moveTo(constructionSiteItem.waypoint);
         }
         this.getMotor().sounds.play('ready');
+        buildQueue.resetActualConstruction(subType,queueObject.elementName);
+        
+        return true;
     };    
 };
 

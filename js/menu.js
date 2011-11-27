@@ -28,7 +28,6 @@ OBJECTS.menu = function(){
 	 */
 	this.constructBuildList = function(){
 
-		var RTS = this.getRts();
 		var tabLinks = this.dom.find('a[href$=-tab]');
 
 		tabLinks.each(function(){
@@ -48,19 +47,42 @@ OBJECTS.menu = function(){
 			$.each(items,function(itemName,item){
 				var sType = item.sType;
 				if(tabDom = menu.tabsDoms[sType+'s-tab']){
-					menu.itemsDoms[itemName] = $('<li class="'+itemName+' available"><a href="#'+itemName+'"><span class="count"></span><label>'+itemName+'</label></a></li>');
+					menu.itemsDoms[itemName] = $('<li class="'+itemName+' available"><a href="#'+itemName+'"><span class="progress"></span><span class="count"></span><label>'+itemName+'</label></a></li>');
 					tabDom.find('ul').append(menu.itemsDoms[itemName]);
 
-					menu.itemsDoms[itemName].click(function(){
-						if(queue = RTS.motor[type+'Queue']){
-							queue.addQueue(type,itemName,sType,RTS.playerTeam);
-						}
-						return false;
-					});
+					menu.boxClick(type,itemName,sType);
+//					menu.itemsDoms[itemName].click(function(){
+//						if(queue = RTS.motor[type+'Queue']){
+//							queue.addQueue(type,itemName,sType,menu.getRts().playerTeam);
+//						}
+//						return false;
+//					});
 				}
 
 			});
 		});
+	};
+	
+	/**
+	 * Dynamise click on a particular box 
+	 * @param {string} type building or unit 
+	 * @param {elementName} elementName
+	 * @param {sType} sType aerial, vehicule, etc.
+	 */
+	this.boxClick = function(type,elementName,sType){
+		var RTS = this.getRts();
+		
+		menu.itemsDoms[elementName].click(function(){
+			if(!menu.isReady(elementName)){
+				if(queue = RTS.motor[type+'Queue']){
+					queue.addQueue(type,elementName,sType,RTS.playerTeam);
+				}
+			}else{
+				var item = new OBJECTS.placement(menu.getRts().playerTeam , 'building', elementName);
+				menu.getMotor().selection.addSelection(item);
+			}
+			return false;
+		});		
 	};
 	
 	/**
@@ -86,6 +108,7 @@ OBJECTS.menu = function(){
 		this.dom.find('.subMenu ul li:nth-child(1) a').click();
 	};
 
+	
 	this.updateBuildList = function(){
 
 	};
@@ -127,6 +150,68 @@ OBJECTS.menu = function(){
 			pClass = 'low';
 		}
 		this.domPower.attr('class','powerJauge '+pClass);
+	};
+	
+	/**
+	 * Update the number of element in the queue of a particular item 
+	 * @param {String} elementName
+	 * @param {Number} count
+	 */
+	this.updateCount = function(elementName,count){
+		var actualCount = parseInt($('li.'+elementName+' .count').html());
+		if(isNaN(actualCount)) actualCount = 0;
+		var newCount = actualCount + count; 
+		if(newCount>0){
+			$('li.'+elementName+' .count').html(newCount);
+		}else{
+			$('li.'+elementName+' .count').html('');
+		}
+	};
+	
+	/**
+	 * Update the progress bar of an item in the menu
+	 * @param {String} elementName
+	 * @param {Number} progress 
+	 */
+	this.updateProgress = function(elementName,progress){
+		$('li.'+elementName+' .progress').css({height: 55*progress});
+		
+	};
+	
+	/**
+	 * Blink the actual ready element
+	 * @param {String} elementName 
+	 */
+	this.setReady = function(elementName){
+		
+		var blinker = $('li.'+elementName+' .progress').addClass('ready').stop();
+		
+		// launch blinking 
+		var time = 500;		
+		function myShow(){
+			blinker.fadeTo(time,1,myHide);
+		}		
+		function myHide(){
+			blinker.fadeTo(time,0,myShow);
+		}		
+		myShow();		
+
+	};
+	
+	/**
+	 * Unblink the actual ready element
+	 * @param {String} elementName
+	 */
+	this.unsetReady = function(elementName){
+		$('li.'+elementName+' .progress').stop().fadeTo(1,0.5).removeClass('ready');
+	};
+	
+	/**
+	 * Indicate weither a particular element is ready to place 
+	 * @param {String} elementName
+	 */
+	this.isReady = function(elementName){
+		return $('li.'+elementName+' .progress').hasClass('ready');
 	};
 
 	this.init();

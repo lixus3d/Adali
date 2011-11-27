@@ -102,6 +102,7 @@ OBJECTS.selection = function(){
         $.each(selection.list, function(k,element){
             element.unselect();
         });
+        this.type = '';
         this.list.length = 0;        
     };
     

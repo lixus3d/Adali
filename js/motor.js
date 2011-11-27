@@ -96,6 +96,18 @@ OBJECTS.motor = function(map){
                          height: Math.abs(motor.selector.start.y - motor.selector.end.y)
                      });
                  }
+            }else if(motor.selection.type == 'placement'){
+                var action = {
+                        position: {
+                            x: event.pageX,
+                            y: event.pageY
+                        },
+                        type: 'drawHelper'
+                    };            	
+            	motor.selection.doAction(action);
+//            	log('placement');
+//                var nodeCode = motor.getRts().UTILS.getPointCode(motor.convertToNodePosition(positionOnGrid));
+//            	motor.getMap().drawNodeHelp(nodeCode);
             }
         });
     };

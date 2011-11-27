@@ -270,6 +270,42 @@ ABSTRACTS.itemAbstract = function(){
     };
     
 
+    /**
+     *  Set the body direction of the unit 
+     */
+    this.setDirection = function(direction,force){
+
+        if(force == undefined) force = false;
+
+        var orientation = direction[2];
+        if(force || orientation == this.lastOrientation ){
+            if(orientation){
+                this.orientation = orientation;
+                this.graphicDom.attr('class','graphic '+orientation);
+            }
+        }
+        this.lastOrientation = orientation;
+    };
+
+    /**
+     * Set the turret direction of the unit 
+     */
+    this.setTurretDirection = function(direction,force){
+        if(this.vars.turret){
+            if(force == undefined) force = false;
+
+            var orientation = direction[2];
+            if(force || orientation == this.lastTurretOrientation ){
+
+                if(orientation){
+                    this.turretOrientation = orientation;
+                    this.turretDom.attr('class','turret '+orientation);
+                }
+            }
+            this.lastTurretOrientation = orientation;
+        }
+    };    
+
     this.toString = function(){return 'itemAbstract';};
 };
 

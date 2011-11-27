@@ -19,6 +19,7 @@ OBJECTS.sounds = function(){
         missile: 2,
         move: 6,
         moving: 3,
+        place: 1,
         ready: 1,
         rifle: 3,
         rocket: 2,

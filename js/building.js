@@ -81,9 +81,7 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         this.team = team;
         this.vars = $.extend(this.vars,options);
         this.life = this.vars.life;
-        this.initWeapon();
-        this.initPower(); // Drain or product so
-        this.initConstruction(); // init construction possibility
+        this.initWeapon();        
     };
 
     /**
@@ -98,6 +96,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
                 this.getMap().drawNodeHelp(nodeCodes[key]);
             }
         }
+        this.getMotor().sounds.play('place');
+        this.initPower(); // Drain or product so
+        this.initConstruction(); // init construction possibility
     };
 
     /**
@@ -164,15 +165,20 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     /**
      * Kill the building 
      */
-    this.kill = function(){
+    this.kill = function(passive){
+    	
+    	if(passive == undefined) passive = false;
+    	
         if(this.inLife){
             this.life = 0;
             this.inLife = false;
             this.resetPower();
             this.resetConstruction();
-            this.dom.remove();
+            if(this.dom) this.dom.remove();
             //this.dom.html('KILL');
-            this.getMotor().sounds.play('explosion');
+            if(!passive){
+            	this.getMotor().sounds.play('explosion');
+        	}
         }
         this.getMotor().buildings.killBuilding(this.getId());
     };

@@ -225,6 +225,21 @@ a {
     text-shadow: 1px 1px #000;
 }
 
+.menu .construction .list .itemGrid ul li a .progress{
+	border-radius:6px;
+	position:absolute;
+    text-align:center;
+    display:block;
+    width:65px;
+    /*height:25px;*/    
+    background-color:rgba(0,0,0,0.5);
+}
+
+.menu .construction .list .itemGrid ul li a .progress.ready{
+    background-color:rgba(255,255,255,0.5);
+}
+
+
 .menu .construction .list .itemGrid ul li a label{
     display:block;
     border-radius:3px;

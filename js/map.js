@@ -89,7 +89,7 @@ OBJECTS.map = function(size) {
     	var isWalkable = {value: 1, error: 0, infos: {}};
     	
     	// Aerial units can move anywhere
-    	if(unit.vars.movement == 'helicopter'){
+    	if(unit && unit.vars && unit.vars.movement == 'helicopter'){
     		return isWalkable;
     	}
     	
@@ -164,11 +164,11 @@ OBJECTS.map = function(size) {
         var unitFound = {unit: null, error: 0};
 
         $.each(map.getMotor().units.list,function(k,unit){
-            if(unit.getId() == actualUnit.getId())
+            if(actualUnit && unit.getId() == actualUnit.getId())
                 return true; // go to next unit
             if(unit.getNodeCode() == nodeCode){
                 unitFound.unit = unit;
-                if(actualUnit.team.getId() == unit.team.getId()){
+                if(actualUnit && actualUnit.team.getId() == unit.team.getId()){
                     unitFound.error = 2;
                 }else{
                     unitFound.error = 1;

@@ -53,7 +53,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         rotor: false,
         weapon: [],
         requiredType: [],
-        deploy: 'constructionSite',
+        deploy: '',
         constructionSite: 'factory'
     };
     
@@ -101,15 +101,21 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     };
 
     /**
-     * Kill the unit 
+     * Kill the unit
+     * @param {Boolean} passive Weither to play sound or not  
      */
-    this.kill = function(){
+    this.kill = function(passive){
+    	
+    	if(passive == undefined) passive = false;
+    	
         if(this.inLife){
             this.life = 0;
             this.inLife = false;
             this.dom.remove();
             //this.dom.html('KILL');
-            this.getMotor().sounds.play('explosion');
+            if(!passive){
+            	this.getMotor().sounds.play('explosion');
+        	}
         }
         this.getMotor().units.killUnit(this.getId());
     };
@@ -149,7 +155,13 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     	// Player unit are selectable 
         if(unit.team.vars.player){
             unit.selectDom.click(function(){
-                unit.getMotor().selection.addSelection(unit);
+            	if(unit.isSelected()){
+            		if(unit.vars.deploy){
+            			unit.deploy();
+            			return false;
+            		}
+            	}
+            	unit.getMotor().selection.addSelection(unit);           	
                 return false;
             });
         }else{
@@ -481,42 +493,40 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
 
     // this.target = null; // to stop attacking
     };
-
+    
     /**
-     *  Set the body direction of the unit 
+     * Deploy the unit into the structure carried
      */
-    this.setDirection = function(direction,force){
-
-        if(force == undefined) force = false;
-
-        var orientation = direction[2];
-        if(force || orientation == this.lastOrientation ){
-            if(orientation){
-                this.orientation = orientation;
-                this.graphicDom.attr('class','graphic '+orientation);
-            }
-        }
-        this.lastOrientation = orientation;
+    this.deploy = function(){
+    	// check if deployement is possible for this unit 
+    	if(this.vars.deploy){
+    		
+    		// get the structure footprint
+    		var structure = new OBJECTS.building(unit.x,unit.y,unit.team,this.vars.deploy);
+    		
+    		var footprint = structure.getFootprintNodeCode();
+    		
+    		var ok = true;
+    		$.each(footprint,function(k,nodeCode){
+    			if(unit.getMap().isWalkable(nodeCode, unit).value == 0){
+    				//unit.getMotor().say(nodeCode+' not walkable', unit);
+    				return  ok= false;
+    			}
+    		});
+    		
+    		if(ok){
+    			unit.getMotor().buildings.addBuilding(structure);
+    			unit.kill(true); // passive , no sound , no score , etc . 
+    			//this.getMotor().sounds.play('place');
+    			return true;
+    		}else{
+    			this.getMotor().say('Can\'t deploy here !', this);	
+    			structure.kill(true);
+    		}	
+    	}    	
+    	return false;
     };
 
-    /**
-     * Set the turret direction of the unit 
-     */
-    this.setTurretDirection = function(direction,force){
-        if(this.vars.turret){
-            if(force == undefined) force = false;
-
-            var orientation = direction[2];
-            if(force || orientation == this.lastTurretOrientation ){
-
-                if(orientation){
-                    this.turretOrientation = orientation;
-                    this.turretDom.attr('class','turret '+orientation);
-                }
-            }
-            this.lastTurretOrientation = orientation;
-        }
-    };
 
     // Init the unit when instantiate
     this.init(x,y,team,unitType,options);

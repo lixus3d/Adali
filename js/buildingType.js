@@ -29,8 +29,8 @@ RULES.building = {
 	smallPower: {
 		sType: 'building',
 		type: 'power',
-		price: 400,
-		life: 1200,
+		price: 10,
+		life: 10,
 		powerDrain: 10,
 		powerProduce: 700,
 		turret: false,

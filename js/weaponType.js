@@ -47,7 +47,7 @@ RULES.weapon = {
      */
     
     'rocket': {
-    	sound: 'missile',
+    	sound: 'rocket',
     	damage : 35,
     	speed: 125,
     	reloadTime: 3,
