@@ -17,7 +17,7 @@ Actually i'm just planning to do an singleplayer version with all usual RTS feat
 Chrome and Firefox run the projet perfectly. 
 
 + You can see a working demo on (http://www.adreamaline.com/adali/).
-+ The project is in javascript, so you can test it just with a browser by downloading the sources. (ugly index.php block that for now)
++ The project is in javascript, so you can test it just with a browser by downloading the sources.
 
 _Have fun with and give me some feedbacks please_
 
@@ -26,9 +26,8 @@ _Have fun with and give me some feedbacks please_
 
 - Astar is working great, but can be better of course.
 - The RTS is running in isometric.
-- You can build move, attack and construct __vehicules__ only.
-- Ressources are not yet implemented.
-- Some french comment maybe, I will try to track them ;)
+- You can build move, attack and construct vehicules and structures.
+- Ressources are not yet fully implemented.
 
 
 ## Todo 
