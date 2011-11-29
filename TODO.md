@@ -3,9 +3,7 @@
 ## Top priority 
 
 ### project structure 
-- Documentation, docBlock, is missing (Is there netbeans javascript automatic docblock O.o ?)
 - Trying to do better oop (as far as javascript can do) : interface, namespace, unit test.  
-- Delete the index.php
 
 ### project features
 - Implementing ressources
