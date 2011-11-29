@@ -3,6 +3,10 @@
  */
 RULES.building = {
 
+	/*---------------------
+	 		STRUCTURES
+	 -----------------------*/
+		
 	/*
      * Default Base : constructionSite
      */
@@ -17,7 +21,7 @@ RULES.building = {
 		speed: 0,
 		sight: 10, // view up to x nodes
 		imageClass: 'constructionSite',
-		footprint: [[1,0],[0,-1],[1,-1],[-1,0],[-1,-1]], // ground foot print , determine wich node is occupied by the building
+		footprint: [[1,0],[0,-1],[1,-1]], // ground foot print , determine wich node is occupied by the building
 		weapon: [],
 		requiredType: ['power']
 	},
@@ -29,8 +33,8 @@ RULES.building = {
 	smallPower: {
 		sType: 'building',
 		type: 'power',
-		price: 10,
-		life: 10,
+		price: 700,
+		life: 1000,
 		powerDrain: 10,
 		powerProduce: 700,
 		turret: false,
@@ -65,8 +69,8 @@ RULES.building = {
 	factory: {
 		sType: 'building',
 		type: 'factory',
-		price: 2000,
-		life: 2500,
+		price: 20,
+		life: 25,
 		powerDrain: 500,
 		powerProduce: 0,
 		turret: false,
@@ -75,6 +79,7 @@ RULES.building = {
 		imageClass: 'factory',
 		weapon: [],
 		footprint: [[1,0],[0,-1],[1,-1]], // ground foot print , determine wich node is occupied by the building
+		popOffset: {x: -70, y:5},
 		requiredType: ['power','refinery']
 	},
 
@@ -95,5 +100,25 @@ RULES.building = {
 		weapon: [],
 		constructionSite: 'armory',
 		requiredType: ['power','refinery']
+	},
+	
+	/*---------------------
+		DEFENSES
+	-----------------------*/
+	rifleTurret: {
+		sType: 'defense',
+		type: 'defense',
+		price: 70,
+		life: 120,
+		powerDrain: 105,
+		powerProduce: 0,
+		turret: true,
+		speed: 0,
+		sight: 7, // view up to x nodes
+		imageClass: 'rifleTurret',
+		weapon: ['30mm'],
+		constructionSite: 'constructionSite',
+		requiredType: ['smallPower','refinery'],
+		yOffset: {x:0,y:7},
 	}
 };

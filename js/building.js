@@ -23,6 +23,9 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
     this.itemType = '';
     this.unitSize = 128;
     this.centerOffset = this.unitSize/-2;
+    this.yOffset = -14; // 4 nodeCode building usually must be offset this way
+    this.zIndexOffset = 0;
+    
     /*
      * Path
      */
@@ -57,9 +60,12 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
         turret: false,
         weapon: [],
         requiredType: [],
-        footprint: []
+        footprint: [],
+        popOffset: {x: 0, y: 0}, // the position where unit will popup when created by this building 
     };
 
+    this.weapons = [];
+  	this.weaponsTypeFire = [];
 
     /*
      * Methods
@@ -72,17 +78,17 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
      * @param {String} buildingType
      * @param {Object} options
      */
-    this.init = function(x,y,team,buildingType,options){
-    	this.itemType = buildingType;
-        if( buildingOptions = this.getRules().building[buildingType]){
-            this.vars = $.extend(this.vars,buildingOptions);
-        }
-        this.setPosition(x,y);
-        this.team = team;
-        this.vars = $.extend(this.vars,options);
-        this.life = this.vars.life;
-        this.initWeapon();        
-    };
+//    this.init = function(x,y,team,buildingType,options){
+//    	this.itemType = buildingType;
+//        if( buildingOptions = this.getRules().building[buildingType]){
+//            this.vars = $.extend(this.vars,buildingOptions);
+//        }
+//        this.setPosition(x,y);
+//        this.team = team;
+//        this.vars = $.extend(this.vars,options);
+//        this.life = this.vars.life;
+//        this.initWeapon();        
+//    };
 
     /**
      * Activate the building : draw and control 
@@ -503,68 +509,6 @@ OBJECTS.building = function(x,y,team,buildingType,options) {
             this.getMotor().say(text);
             };
         return true;
-    };
-
-    /**
-     * Make the building attack a particular target
-     * @param {RTSitem} target
-     */
-    this.attack = function(target){
-
-        if(target != undefined){
-            if(target.inLife){
-                if(this.vars.turret){
-                    this.setTurretDirection(this.getRts().UTILS.getDirectionByPosition(this, target), true);
-                }else{
-                    this.setDirection(this.getRts().UTILS.getDirectionByPosition(this, target), true);
-                }
-                this.fire(target);
-            }else if(this.target && target.getId() == this.target.getId()){
-                this.target = null;
-            }
-        }
-
-    // this.target = null; // to stop attacking
-    };
-
-    /**
-     * Set the building direction
-     * @param {vectorObject} direction
-     * @param {Boolean} force 
-     */
-    this.setDirection = function(direction,force){
-
-        if(force == undefined) force = false;
-
-        var orientation = direction[2];
-        if(force || orientation == this.lastOrientation ){
-            if(orientation){
-                this.orientation = orientation;
-                this.graphicDom.attr('class','graphic '+orientation);
-            }
-        }
-        this.lastOrientation = orientation;
-    };
-
-    /**
-     * Set the building turret direction
-     * @param {vectorObject} direction
-     * @param {Boolean} force 
-     */
-    this.setTurretDirection = function(direction,force){
-        if(this.vars.turret){
-            if(force == undefined) force = false;
-
-            var orientation = direction[2];
-            if(force || orientation == this.lastTurretOrientation ){
-
-                if(orientation){
-                    this.turretOrientation = orientation;
-                    this.turretDom.attr('class','turret '+orientation);
-                }
-            }
-            this.lastTurretOrientation = orientation;
-        }
     };
 
     this.showWaypoint = function(){

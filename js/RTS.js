@@ -40,7 +40,7 @@ var RULES = {
 		
 		sightStaticMultiplier: 1.1,
 		
-		startingCredits: 3000
+		startingCredits: 10000
 	}
 		
 };
@@ -56,7 +56,7 @@ OBJECTS.baseObject = function(){
 
 /**
  * Return the RTS object anywhere 
- * @returns {OBJECTS.RTS} The RTS primary object
+ * @return {OBJECTS.RTS} The RTS primary object
  * @author Lixus3d <developpement@adreamaline.com>
  * @date 19 nov. 2011
  */
@@ -79,6 +79,16 @@ OBJECTS.baseObject.prototype.getRules = function(){
 };
 
 /**
+ * Return the RTS motor anywhere 
+ * @returns {OBJECTS.motor}
+ * @author Lixus3d <developpement@adreamaline.com>
+ * @date 20 nov. 2011
+ */
+OBJECTS.baseObject.prototype.getMotor = function(){
+    return this.getRts().motor;
+};
+
+/**
  * Return the RTS map anywhere 
  * @returns {OBJECTS.map}
  * @author Lixus3d <developpement@adreamaline.com>
@@ -88,12 +98,3 @@ OBJECTS.baseObject.prototype.getMap = function(){
     return this.getMotor().map;
 };
 
-/**
- * Return the RTS motor anywhere 
- * @returns {OBJECTS.motor}
- * @author Lixus3d <developpement@adreamaline.com>
- * @date 20 nov. 2011
- */
-OBJECTS.baseObject.prototype.getMotor = function(){
-    return this.getRts().motor;
-};

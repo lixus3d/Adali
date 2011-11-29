@@ -36,6 +36,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         time: 0,
         retry: 0
     };
+    
 
     /*
      * Unit configuration;
@@ -56,37 +57,10 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         deploy: '',
         constructionSite: 'factory'
     };
-    
-    // Weapons
-    this.weapons = [];
-    this.weaponsTypeFire = [];
 
-    
-    /**
-     * Init the unit object 
-     * @param {Number} x
-     * @param {Number} y
-     * @param {OBJECTS.team} team
-     * @param {String} unitType
-     * @param {Object} options
-     * @author Lixus3d <developpement@adreamaline.com>
-     * @date 20 nov. 2011
-     */
-    this.init = function(x,y,team,unitType,options){
-    	this.itemType = unitType;
-        if( unitOptions = this.getRules().unit[unitType]){
-            this.vars = $.extend(this.vars,unitOptions);
-        }
-        this.setPosition(x,y);
-        this.team = team;
-        this.vars = $.extend(this.vars,options);
-        this.life = this.vars.life;
-        this.initWeapon();
-        if(this.vars && this.vars.movement == 'helicopter'){
-        	this.yOffset = -48;   
-        	this.zIndexOffset = 2000;
-        }
-    };
+  this.weapons = [];
+  this.weaponsTypeFire = [];
+
     
     /**
      * Activate the unit : draw and control 
@@ -471,28 +445,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         return true;
     };
 
-    /** 
-     * Attack a particular target 
-     * TODO : Check if the target is still insight 
-     * @param {RTSitem} target
-     */
-    this.attack = function(target){
 
-        if(target != undefined){
-            if(target.inLife){
-                if(this.vars.turret){
-                    this.setTurretDirection(this.getRts().UTILS.getDirectionByPosition(this, target), true);
-                }else{
-                    this.setDirection(this.getRts().UTILS.getDirectionByPosition(this, target), true);
-                }
-                this.fire(target);
-            }else if(this.target && target.getId() == this.target.getId()){
-                this.target = null;
-            }
-        }
-
-    // this.target = null; // to stop attacking
-    };
     
     /**
      * Deploy the unit into the structure carried
@@ -502,7 +455,10 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     	if(this.vars.deploy){
     		
     		// get the structure footprint
-    		var structure = new OBJECTS.building(unit.x,unit.y,unit.team,this.vars.deploy);
+    		var structure = this.getStructure();
+    		var absPositionCentered = unit.getMotor().convertToRealPosition(unit.getMotor().convertToNodePosition({x:unit.x,y:unit.y}));
+    		structure.x = absPositionCentered.x;
+    		structure.y = absPositionCentered.y;
     		
     		var footprint = structure.getFootprintNodeCode();
     		
@@ -525,6 +481,14 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     		}	
     	}    	
     	return false;
+    };
+    
+    this.getStructure = function(){
+    	
+    	if(this.deployStructure == undefined){
+    		this.deployStructure = new OBJECTS.building(unit.x,unit.y,unit.team,this.vars.deploy); 
+    	}
+    	return this.deployStructure;    	
     };
 
 

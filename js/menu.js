@@ -148,7 +148,9 @@ OBJECTS.menu = function(){
 			pClass = 'limit';
 		}else if( pRatio >= 1){
 			pClass = 'low';
+			//this.getMotor().sounds.play('poweroff');
 		}
+		
 		this.domPower.attr('class','powerJauge '+pClass);
 	};
 	

@@ -20,8 +20,11 @@ OBJECTS.sounds = function(){
         move: 6,
         moving: 3,
         place: 1,
+        poweroff: 1,
+        poweron: 1,
         ready: 1,
         rifle: 3,
+        rifle2: 3,
         rocket: 2,
         select: 5
     };

@@ -183,7 +183,7 @@
 .building .topLeft,
 .building .topleft {background-position: 0 -384px;}
 .building .topRight,
-.building .topright {background-position:  -512px;}
+.building .topright {background-position: 0 -128px;}
 .building .bottomRight,
 .building .bottomright {background-position: 0 -896px;}
 .building .bottomLeft,
@@ -206,4 +206,23 @@
     width:128px;
     height:128px;
     background-image: url('../img/constructionSite.png');
+}
+
+.building.rifleTurret .graphic{
+    width:128px;
+    height:128px;
+    background-image: url('../img/rifleTurretBody.png');
+}
+.building.rifleTurret .graphic .turret{
+    width:128px;
+    height:128px;
+    background-image: url('../img/rifleTurretTurret.png');
+}
+.building.rifleTurret .selectZone {
+    position:absolute;
+    display:block;
+    top:38px;
+    left:38px;
+    width:53px;
+    height:42px; 
 }

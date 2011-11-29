@@ -67,8 +67,12 @@ OBJECTS.placement = function(team,type,elementName){
 	
 	this.updatePosition = function(position){
 		//placement.structure = new OBJECTS[this.itemType](0,0,placement.team,placement.elementName);
-		placement.structure.x = position.x;
-		placement.structure.y = position.y;		
+		// convert the event position to the nearest nodeCode center
+		nodePosition = placement.getMotor().convertToNodePosition(position);
+		absPosition = placement.getMotor().convertToRealPosition(nodePosition,RTS.isoSize);		
+		
+		placement.structure.x = absPosition.x;
+		placement.structure.y = absPosition.y;		
 		placement.footprint = placement.structure.getFootprintNodeCode();
 		//placement.structure.kill(true);
 	};

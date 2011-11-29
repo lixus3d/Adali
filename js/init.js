@@ -49,7 +49,7 @@
     var team1 = new OBJECTS.team({player: true});
 	RTS.playerTeam = team1;
 
-    var team2 = new OBJECTS.team({player: false, human: false});
+    var team2 = new OBJECTS.team({player: true, human: false});
 
     RTS.motor.teams.addTeam(team1);
     RTS.motor.teams.addTeam(team2);

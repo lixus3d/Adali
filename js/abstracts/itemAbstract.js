@@ -51,11 +51,15 @@ ABSTRACTS.itemAbstract = function(){
      * Attack
      */
     this.target = null;
-    this.weapons = [];
+    
+    // Weapons // bug if in the prototype ... ?
+//    this.weapons = []; 
+//    this.weaponsTypeFire = [];
     
     /*
      * Methods
      */
+        
     
     this.setId = function(id){
         this.id = id;        
@@ -76,6 +80,35 @@ ABSTRACTS.itemAbstract = function(){
             y: this.y
             };
     };
+    
+    /**
+     * Init the unit object 
+     * @param {Number} x
+     * @param {Number} y
+     * @param {OBJECTS.team} team
+     * @param {String} unitType
+     * @param {Object} options
+     * @author Lixus3d <developpement@adreamaline.com>
+     * @date 20 nov. 2011
+     */
+    this.init = function(x,y,team,unitType,options){
+    	this.itemType = unitType;
+        if( itemOptions = this.getRules()[this.type][unitType]){
+            this.vars = $.extend(this.vars,itemOptions);
+        }
+        this.setPosition(x,y);
+        this.team = team;
+        this.vars = $.extend(this.vars,options);
+        this.life = this.vars.life;
+        this.initWeapon();
+        if(this.vars && this.vars.movement == 'helicopter'){
+        	this.yOffset = -48;   
+        	this.zIndexOffset = 2000;
+        }
+        if(this.vars.yOffset){
+        	this.yOffset = this.vars.yOffset.y;
+        }
+    };    
     
     /**
      * Initialize item weapons from the item vars
@@ -100,17 +133,17 @@ ABSTRACTS.itemAbstract = function(){
         
         var item = this;
         
-        this.dom.css({
-            left: (this.x - item.unitSize/2),
-            top: (this.y - item.unitSize/1.8) + this.yOffset
+        item.dom.css({
+            left: (item.x - item.unitSize/2),
+            top: (item.y - item.unitSize/1.8) + item.yOffset
         });    
         
-        this.dom.css({
-           zIndex: Math.ceil(1000 + this.y + this.zIndexOffset)
+        item.dom.css({
+           zIndex: Math.ceil(1000 + item.y + item.zIndexOffset)
         });
         
-        this.selectDom.css({
-            zIndex: Math.ceil(2000000 + this.y)
+        item.selectDom.css({
+            zIndex: Math.ceil(2000000 + item.y)
          });
         
     };
@@ -262,12 +295,43 @@ ABSTRACTS.itemAbstract = function(){
             }
         });
         
+        $.each(item.getMotor().buildings.list,function(k,sBuilding){
+            if(sBuilding.team.getId() != item.team.getId()){
+                if(item.inSight(sBuilding.getPosition())){
+                    inSights.push(sBuilding);
+                }
+            }
+        });
+        
         if(inSights){
-            inSights.sort(this.getMotor().sortKillingList);
+            inSights.sort(item.getMotor().sortKillingList);
             return inSights[0];
         }        
         return false;
     };
+    
+    /** 
+     * Attack a particular target 
+     * TODO : Check if the target is still insight 
+     * @param {RTSitem} target
+     */
+    this.attack = function(target){
+
+        if(target != undefined){
+            if(target.inLife){
+                if(this.vars.turret){
+                    this.setTurretDirection(this.getRts().UTILS.getDirectionByPosition(this, target), true);
+                }else if(this.type == 'unit'){
+                    this.setDirection(this.getRts().UTILS.getDirectionByPosition(this, target), true);
+                }
+                this.fire(target);
+            }else if(this.target && target.getId() == this.target.getId()){
+                this.target = null;
+            }
+        }
+
+    // this.target = null; // to stop attacking
+    };    
     
 
     /**
