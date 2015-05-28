@@ -1,4 +1,6 @@
 
+    var retryCount = 0;
+    var maxRetry = 10;
 
 //try {
 
@@ -21,62 +23,79 @@
             var subType = link.attr('rel');
             RTS.motor.unitQueue.addQueue(elementType,subType,team1);
         });
+
+        // Ugly retry when everything not loaded but ok for now
+        window.setTimeout(start,400);
     });
 
-    var unitTesting = new OBJECTS.unitTesting();
-    unitTesting.doTest();
+    function retry(){
+        if(retryCount++ < maxRetry){
+            window.setTimeout(start,200);
+        }else{
+            document.location.reload();
+        }
+    }
 
-    // CREATING THE RTS OBJECT
-    var RTS = new OBJECTS.RTS();
+    function start(){
+        try{
+            window.unitTesting = new OBJECTS.unitTesting();
+            unitTesting.doTest();
 
-    // Initialize some vars
-    RTS.offset = 0;
-    RTS.grid = 40;
-    RTS.isoSize = {x:64, y:38}; // isometric size for the grid
-    RTS.isoRatio = 38/64;
-    RTS.mapSize = [1000,1000]; // pixelSize
-    RTS.tickTime = 5;
-    RTS.speedDivide = 50;
+            // CREATING THE RTS OBJECT
+            window.RTS = new OBJECTS.RTS();
 
-    // Map creation
-    RTS.map = new OBJECTS.map(RTS.mapSize);
+            // Initialize some vars
+            RTS.offset = 0;
+            RTS.grid = 40;
+            RTS.isoSize = {x:64, y:38}; // isometric size for the grid
+            RTS.isoRatio = 38/64;
+            RTS.mapSize = [1000,1000]; // pixelSize
+            RTS.tickTime = 5;
+            RTS.speedDivide = 50;
 
-    // Motor init
-    RTS.motor = new OBJECTS.motor(RTS.map);
-    RTS.motor.map.drawWalls();
-    
-    // Adding some teams
-    var team1 = new OBJECTS.team({player: true});
-	RTS.playerTeam = team1;
+            // Map creation
+            RTS.map = new OBJECTS.map(RTS.mapSize);
 
-    var team2 = new OBJECTS.team({player: true, human: false});
+            // Motor init
+            RTS.motor = new OBJECTS.motor(RTS.map);
+            RTS.motor.map.drawWalls();
 
-    RTS.motor.teams.addTeam(team1);
-    RTS.motor.teams.addTeam(team2);
+            // Adding some teams
+            window.team1 = new OBJECTS.team({player: true});
+        	RTS.playerTeam = team1;
 
-    // Create some unit
-    RTS.motor.units.addUnit(new OBJECTS.unit(80,80,team1,'mcv'));
-    //RTS.motor.units.addUnit(new OBJECTS.unit(120,80,team1,'tank'));
-    //RTS.motor.units.addUnit(new OBJECTS.unit(80,120,team1,'heavyTank'));
-    //RTS.motor.units.addUnit(new OBJECTS.unit(120,120,team1,'heavyTank'));
-    RTS.motor.units.addUnit(new OBJECTS.unit(200,120,team1,'komX'));
-    //RTS.motor.units.addUnit(new OBJECTS.unit(200,80,team1,'artilleryTank'));
-    
+            window.team2 = new OBJECTS.team({player: true, human: false});
 
-    //RTS.motor.buildings.addBuilding(new OBJECTS.building(128,208,team1,'constructionSite'));
-    //RTS.motor.buildings.addBuilding(new OBJECTS.building(128,308,team1,'smallPower'));
-    //RTS.motor.buildings.addBuilding(new OBJECTS.building(256,308,team1,'factory'));
-    
-    //RTS.motor.buildings.getItemById(1).primary = true;
+            RTS.motor.teams.addTeam(team1);
+            RTS.motor.teams.addTeam(team2);
+
+            // Create some unit
+            RTS.motor.units.addUnit(new OBJECTS.unit(80,80,team1,'mcv'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(140,80,team1,'tank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(90,130,team1,'heavyTank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(120,120,team1,'heavyTank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(200,120,team1,'komX'));
+            //RTS.motor.units.addUnit(new OBJECTS.unit(200,80,team1,'artilleryTank'));
 
 
-    RTS.motor.units.addUnit(new OBJECTS.unit(840,350,team2,'tank'));
-    RTS.motor.units.addUnit(new OBJECTS.unit(800,400,team2,'tank'));
-    RTS.motor.units.addUnit(new OBJECTS.unit(860,410,team2,'heavyTank'));
-    RTS.motor.units.addUnit(new OBJECTS.unit(780,450,team2,'heavyTank'));
-    RTS.motor.units.addUnit(new OBJECTS.unit(850,440,team2,'artilleryTank'));
+            //RTS.motor.buildings.addBuilding(new OBJECTS.building(128,208,team1,'constructionSite'));
+            //RTS.motor.buildings.addBuilding(new OBJECTS.building(128,308,team1,'smallPower'));
+            //RTS.motor.buildings.addBuilding(new OBJECTS.building(256,308,team1,'factory'));
 
-    RTS.motor.start();
+            //RTS.motor.buildings.getItemById(1).primary = true;
+
+
+            RTS.motor.units.addUnit(new OBJECTS.unit(840,350,team2,'tank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(800,400,team2,'tank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(860,410,team2,'heavyTank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(780,450,team2,'heavyTank'));
+            RTS.motor.units.addUnit(new OBJECTS.unit(850,440,team2,'artilleryTank'));
+
+            RTS.motor.start();
+        }catch (e) {
+            retry();
+        }
+    }
 
 //}catch(e){
 //    log('///// EXCEPTION /////')

@@ -1,5 +1,5 @@
 /**
- * Unit object 
+ * Unit object
  * @param {Number} x
  * @param {Number} y
  * @param {OBJECTS.team} team
@@ -36,7 +36,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
         time: 0,
         retry: 0
     };
-    
+
 
     /*
      * Unit configuration;
@@ -61,9 +61,9 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
   this.weapons = [];
   this.weaponsTypeFire = [];
 
-    
+
     /**
-     * Activate the unit : draw and control 
+     * Activate the unit : draw and control
      */
     this.activate = function(){
         this.draw();
@@ -76,12 +76,12 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
 
     /**
      * Kill the unit
-     * @param {Boolean} passive Weither to play sound or not  
+     * @param {Boolean} passive Weither to play sound or not
      */
     this.kill = function(passive){
-    	
+
     	if(passive == undefined) passive = false;
-    	
+
         if(this.inLife){
             this.life = 0;
             this.inLife = false;
@@ -95,38 +95,38 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     };
 
     /**
-     * Create the dom for a unit 
+     * Create the dom for a unit
      */
     this.makeDom = function(){
-    	
+
         if(this.vars.turret){
             this.dom = $('<div id="unit-'+this.id+'" class="unit '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic default"><div class="turret default"></div></div></div>');
             this.turretDom = this.dom.find('.turret');
         }else{
             this.dom = $('<div id="unit-'+this.id+'" class="unit '+this.vars.imageClass+'"><div class="selectZone"><div class="lifeJauge"></div></div><div class="graphic default"></div></div>');
         }
-        
+
         if(this.vars.rotor){
         	this.dom.find('.graphic.default').append('<div class="rotor subItem default"></div>');
-        	
+
         	this.rotorDom = this.dom.find('.rotor');
         }
-        
+
         if(this.yOffset != 0){
         	this.dom.find('.graphic.default').append('<div class="shadow subItem default" style="top:' + -unit.yOffset + 'px"></div>');
         }
-        
+
         $('.units').append(this.dom);
         this.graphicDom = this.dom.find('.graphic');
         this.selectDom = this.dom.find('.selectZone');
     };
 
     /**
-     * Activate the control of a unit 
+     * Activate the control of a unit
      */
     this.activateControl = function(){
 
-    	// Player unit are selectable 
+    	// Player unit are selectable
         if(unit.team.vars.player){
             unit.selectDom.click(function(){
             	if(unit.isSelected()){
@@ -135,11 +135,11 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
             			return false;
             		}
             	}
-            	unit.getMotor().selection.addSelection(unit);           	
+            	unit.getMotor().selection.addSelection(unit);
                 return false;
             });
         }else{
-        	// Enemy units are attackable 
+        	// Enemy units are attackable
             unit.dom.hover(function(){
                 if(unit.getMotor().selection.getSize()){
                     unit.dom.addClass('attackCursor');
@@ -196,7 +196,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     /**
      * Tell the unit to go to a particular position
      * @param {posObject} position
-     * @param {String} mode Either "move" or "attack" 
+     * @param {String} mode Either "move" or "attack"
      * @param {Object} options
      */
     this.moveTo = function(position,mode,options){
@@ -246,7 +246,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     };
 
     /**
-     * Execute it every motor tick, move the unit and watch for enemy insight 
+     * Execute it every motor tick, move the unit and watch for enemy insight
      */
     this.tick = function(){
 
@@ -275,7 +275,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     };
 
     /**
-     * Move the unit on the map, if the unit has a path and a destination 
+     * Move the unit on the map, if the unit has a path and a destination
      */
     this.move = function(){
 
@@ -429,7 +429,7 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     };
 
     /**
-     * Stop the movement of the unit 
+     * Stop the movement of the unit
      * @returns {Boolean}
      */
     this.stopMove = function(text){
@@ -446,22 +446,22 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     };
 
 
-    
+
     /**
      * Deploy the unit into the structure carried
      */
     this.deploy = function(){
-    	// check if deployement is possible for this unit 
+    	// check if deployement is possible for this unit
     	if(this.vars.deploy){
-    		
+
     		// get the structure footprint
     		var structure = this.getStructure();
     		var absPositionCentered = unit.getMotor().convertToRealPosition(unit.getMotor().convertToNodePosition({x:unit.x,y:unit.y}));
     		structure.x = absPositionCentered.x;
     		structure.y = absPositionCentered.y;
-    		
+
     		var footprint = structure.getFootprintNodeCode();
-    		
+
     		var ok = true;
     		$.each(footprint,function(k,nodeCode){
     			if(unit.getMap().isWalkable(nodeCode, unit).value == 0){
@@ -469,26 +469,26 @@ OBJECTS.unit = function(x,y,team,unitType,options) {
     				return  ok= false;
     			}
     		});
-    		
+
     		if(ok){
     			unit.getMotor().buildings.addBuilding(structure);
-    			unit.kill(true); // passive , no sound , no score , etc . 
+    			unit.kill(true); // passive , no sound , no score , etc .
     			//this.getMotor().sounds.play('place');
     			return true;
     		}else{
-    			this.getMotor().say('Can\'t deploy here !', this);	
+    			this.getMotor().say('Can\'t deploy here !', this);
     			structure.kill(true);
-    		}	
-    	}    	
+    		}
+    	}
     	return false;
     };
-    
+
     this.getStructure = function(){
-    	
+
     	if(this.deployStructure == undefined){
-    		this.deployStructure = new OBJECTS.building(unit.x,unit.y,unit.team,this.vars.deploy); 
+    		this.deployStructure = new OBJECTS.building(unit.x,unit.y,unit.team,this.vars.deploy);
     	}
-    	return this.deployStructure;    	
+    	return this.deployStructure;
     };
 
 

@@ -3,18 +3,18 @@
     <head>
         <link href="./css/styles.css"  rel="stylesheet"  type="text/css"  media="all" />
         <link href="./css/units.css"  rel="stylesheet"  type="text/css"  media="all" />
+        <script type="text/javascript" src="./js/jquery.js"></script>
         <script type="text/javascript">
-        		var js = new Array();
+        		var js = [];
 
 				/**
-				 * All js filtes to load for the RTS to work 
-				 * order is important, as some js load the "namespace"  
-				 */        		
+				 * All js filtes to load for the RTS to work
+				 * order is important, as some js load the "namespace"
+				 */
         		js.push(
         			/*
         			 * Bases
         			 */
-        			'jquery',
         			'base',
         			'common',
         			'binaryHeaps',
@@ -65,7 +65,7 @@
         			'init');
 
         		var head = document.getElementsByTagName('head')[0];
-        		
+
     			for(i=0;i<js.length;i++){
         			var file = js[i];
     			    var tag = document.createElement('script'); tag.type = 'text/javascript'; tag.src = './js/'+file+'.js';
@@ -90,7 +90,7 @@
                 <div class="walls"></div>
                 <div class="grid"></div>
             </div>
-            
+
             <div class="units"></div>
             <div class="projectiles"></div>
 

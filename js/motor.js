@@ -11,9 +11,9 @@ OBJECTS.motor = function(map){
     var motor = this;
 
     /**
-     * Instantiate all RTS native objects 
+     * Instantiate all RTS native objects
      */
-    this.units = new OBJECTS.units(); 
+    this.units = new OBJECTS.units();
     this.buildings = new OBJECTS.buildings();
     this.teams = new OBJECTS.teams();
     this.sounds = new OBJECTS.sounds();
@@ -32,8 +32,10 @@ OBJECTS.motor = function(map){
         dom: $('.selector')
     };
 
+    this.avoidClick = false;
+
     /**
-     * Init the motor , set the map and activate control 
+     * Init the motor , set the map and activate control
      */
     this.init = function(map){
         this.map = map;
@@ -41,19 +43,17 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Activate mouse control of the RTS 
+     * Activate mouse control of the RTS
      */
     this.activateControl = function(){
 
-        $('body')[0].oncontextmenu = function() {
+        var $body = $('.interface');
+
+        $body[0].oncontextmenu = function() {
             return false;
         };
 
-        $('body').click(function(event){
-            if(motor.selection.getSize()){
-                motor.actionSelection(event);
-            }
-        })
+        $body
         .mousedown(function(event){
             if(event.button == 0){
                 motor.selector.current = true;
@@ -62,22 +62,26 @@ OBJECTS.motor = function(map){
             }else if(event.button==2){
                 motor.unselectAll();
             }
-            return false;
         })
 
         .mouseup(function(event){
-
             motor.selector.current = false;
             if(motor.selector.activ){
                 motor.selector.dom.css({display: 'none'});
                 if( !motor.selection.addSelection(motor.units.searchInSelector(motor.selector)) ){
                     motor.selection.addSelection(motor.buildings.searchInSelector(motor.selector));
                 }
+                motor.avoidClick = true;
+                window.setTimeout(function(){ motor.avoidClick=false; },1);
             }
             motor.selector.activ = false;
-
         })
-
+        .click(function(event){
+            if(motor.avoidClick) return ;
+            if(motor.selection.getSize()){
+                motor.actionSelection(event);
+            }
+        })
         .mousemove(function(event){
 
             if(motor.selector.activ || motor.selector.current){
@@ -103,7 +107,7 @@ OBJECTS.motor = function(map){
                             y: event.pageY
                         },
                         type: 'drawHelper'
-                    };            	
+                    };
             	motor.selection.doAction(action);
 //            	log('placement');
 //                var nodeCode = motor.getRts().UTILS.getPointCode(motor.convertToNodePosition(positionOnGrid));
@@ -113,14 +117,14 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Unselect everything 
+     * Unselect everything
      */
     this.unselectAll = function(){
         motor.selection.resetSelection();
     };
 
     /**
-     * Construct the action to give to every element in the list 
+     * Construct the action to give to every element in the list
      */
     this.actionSelection = function(event,options){
 
@@ -142,7 +146,7 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Function that sort a list for killing 
+     * Function that sort a list for killing
      */
     this.sortKillingList = function(a,b){
         if(a.life < b.life){ // Less life = better target
@@ -154,8 +158,8 @@ OBJECTS.motor = function(map){
     /**
      * convert unit position to node position
      * @param {posObject} position
-     * @returns {nodePos} 
-     */ 
+     * @returns {nodePos}
+     */
     this.convertToNodePosition = function(position){
 
         var RTS = this.getRts();
@@ -173,9 +177,9 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Convert a nodePosition to a realPosition 
+     * Convert a nodePosition to a realPosition
      * @param {nodePos} position
-     * @returns {posObject} 
+     * @returns {posObject}
      */
     this.convertToRealPosition = function(position){
 
@@ -193,7 +197,7 @@ OBJECTS.motor = function(map){
     };
 
    /**
-    * Motor base ticker , tick every sub elements 
+    * Motor base ticker , tick every sub elements
     */
     this.tick = function(){
         motor.units.tick();
@@ -204,7 +208,7 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Start the motor 
+     * Start the motor
      */
     this.start = function(){
         if(this.ticker) this.stop();
@@ -213,7 +217,7 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Stop the motor 
+     * Stop the motor
      */
     this.stop = function(){
         log('Stopping Motor');
@@ -221,7 +225,7 @@ OBJECTS.motor = function(map){
     };
 
     /**
-     * Say something in the game console 
+     * Say something in the game console
      * @param {String} text
      * @param {RTSitem} element
      */
